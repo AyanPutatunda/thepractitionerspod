@@ -1,0 +1,45 @@
+{
+  "name": "thepractitionerspod",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "db:push": "prisma db push",
+    "db:studio": "prisma studio",
+    "db:generate": "prisma generate"
+  },
+  "dependencies": {
+    "next": "^14.2.0",
+    "react": "^18.3.0",
+    "react-dom": "^18.3.0",
+    "@prisma/client": "^5.18.0",
+    "@supabase/supabase-js": "^2.39.0",
+    "@supabase/auth-helpers-nextjs": "^0.8.7",
+    "@supabase/ssr": "^0.0.10",
+    "zod": "^3.23.8",
+    "framer-motion": "^11.3.0",
+    "react-hook-form": "^7.52.0",
+    "@hookform/resolvers": "^3.9.0",
+    "react-hot-toast": "^2.4.1",
+    "lucide-react": "^0.428.0",
+    "date-fns": "^3.6.0",
+    "resend": "^3.5.0",
+    "react-email": "^2.1.6"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.0",
+    "@types/react": "^18.3.0",
+    "@types/react-dom": "^18.3.0",
+    "typescript": "^5.5.0",
+    "tailwindcss": "^3.4.0",
+    "postcss": "^8.4.0",
+    "autoprefixer": "^10.4.0",
+    "prisma": "^5.18.0",
+    "eslint": "^8.57.0",
+    "eslint-config-next": "^14.2.0"
+  }
+}
+

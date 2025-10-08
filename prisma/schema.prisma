@@ -1,0 +1,143 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Note: User authentication is handled by Supabase Auth
+// No User model needed in Prisma
+
+model Episode {
+  id              String   @id @default(cuid())
+  youtubeId       String   @unique
+  title           String
+  description     String   @db.Text
+  episodeNumber   Int      @unique
+  publishedAt     DateTime
+  duration        String
+  thumbnailUrl    String
+  videoUrl        String
+  topics          String[] // Array of tags/topics
+  transcript      String?  @db.Text
+  showNotes       String?  @db.Text
+  viewCount       Int      @default(0)
+  
+  guest           Guest?   @relation(fields: [guestId], references: [id])
+  guestId         String?
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  @@map("episodes")
+}
+
+model Guest {
+  id              String   @id @default(cuid())
+  name            String
+  email           String   @unique
+  phone           String?
+  title           String
+  company         String
+  companyLogoUrl  String?
+  bio             String?  @db.Text
+  headshotUrl     String?
+  linkedinUrl     String?
+  twitterUrl      String?
+  websiteUrl      String?
+  
+  expertise       String[] // Array of expertise areas
+  achievements    String[] // Array of notable achievements
+  
+  episodes        Episode[]
+  application     GuestApplication?
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  @@map("guests")
+}
+
+model GuestApplication {
+  id                    String   @id @default(cuid())
+  
+  // Personal Information
+  name                  String
+  email                 String
+  phone                 String
+  linkedinUrl           String
+  twitterUrl            String?
+  
+  // Professional Details
+  currentRole           String
+  company               String
+  yearsOfExperience     Int
+  expertise             String[] // Array of expertise areas
+  achievements          String[] // Array of notable achievements
+  
+  // Podcast Fit
+  reasonForGuest        String   @db.Text
+  uniqueInsights        String   @db.Text
+  topicsToDiscuss       String[] // Array of topics
+  previousExperience    String?  @db.Text
+  
+  // Availability
+  preferredTimeframe    String
+  timezone              String
+  recordingFormat       String   // video, audio-only
+  
+  // Files
+  headshotUrl           String?
+  companyLogoUrl        String?
+  
+  // Status
+  status                ApplicationStatus @default(NEW)
+  
+  // Internal
+  adminNotes            String?  @db.Text
+  reviewedAt            DateTime?
+  reviewedBy            String?
+  
+  // Relations
+  guest                 Guest?   @relation(fields: [guestId], references: [id])
+  guestId               String?  @unique
+  
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+  
+  @@map("guest_applications")
+}
+
+enum ApplicationStatus {
+  NEW
+  UNDER_REVIEW
+  ACCEPTED
+  DECLINED
+  SCHEDULED
+  COMPLETED
+}
+
+model NewsletterSubscriber {
+  id          String   @id @default(cuid())
+  email       String   @unique
+  name        String?
+  subscribedAt DateTime @default(now())
+  active      Boolean  @default(true)
+  
+  @@map("newsletter_subscribers")
+}
+
+model ContactMessage {
+  id          String   @id @default(cuid())
+  name        String
+  email       String
+  subject     String
+  message     String   @db.Text
+  status      String   @default("new") // new, read, responded
+  createdAt   DateTime @default(now())
+  
+  @@map("contact_messages")
+}
+
