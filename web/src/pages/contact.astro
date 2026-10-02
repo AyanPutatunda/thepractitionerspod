@@ -1,0 +1,56 @@
+---
+import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+import { site } from '../site.config';
+---
+
+<Base title="Contact" description="Get in touch with The Practitioners Pod about sponsorships, partnerships, press or feedback.">
+  <section class="section">
+    <div class="container layout">
+      <div>
+        <p class="eyebrow">Contact</p>
+        <h1>Say hello.</h1>
+        <p class="lede">Sponsorships, partnerships, press, or feedback on an episode. We read everything.</p>
+        <p><a class="btn btn-ghost" href={`mailto:${site.email}`}><Icon name="mail" /> {site.email}</a></p>
+        <p class="muted">Want to be on the show? Use the <a href="/guest">guest application</a> instead so it reaches the right queue.</p>
+      </div>
+      <form class="form card" name="contact" method="POST" action="/thanks/?f=contact" data-netlify="true" netlify-honeypot="company_website">
+        <input type="hidden" name="form-name" value="contact" />
+        <p class="hidden"><label>Leave this empty <input name="company_website" tabindex="-1" autocomplete="off" /></label></p>
+        <div class="row">
+          <div class="field"><label for="c-name">Name</label><input id="c-name" name="name" required autocomplete="name" /></div>
+          <div class="field"><label for="c-email">Email</label><input id="c-email" name="email" type="email" required autocomplete="email" /></div>
+        </div>
+        <div class="field">
+          <label for="c-reason">What's this about?</label>
+          <select id="c-reason" name="reason">
+            <option>Sponsorship</option>
+            <option>Partnership / collaboration</option>
+            <option>Press</option>
+            <option>Episode feedback</option>
+            <option>Something else</option>
+          </select>
+        </div>
+        <div class="field"><label for="c-msg">Message</label><textarea id="c-msg" name="message" required></textarea></div>
+        <button class="btn btn-primary" type="submit">Send message</button>
+      </form>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .layout {
+    display: grid;
+    grid-template-columns: 1fr 1.1fr;
+    gap: clamp(32px, 5vw, 72px);
+    align-items: start;
+  }
+  @media (max-width: 900px) {
+    .layout {
+      grid-template-columns: 1fr;
+    }
+  }
+  .muted {
+    color: var(--muted);
+  }
+</style>

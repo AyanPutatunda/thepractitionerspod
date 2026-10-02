@@ -1,0 +1,8 @@
+# Canonicalize to the apex domain
+https://www.thepractitionerspod.com/*  https://thepractitionerspod.com/:splat  301!
+
+# Handy short links
+/apply      /guest           301
+/subscribe  /#subscribe      302
+/listen     /episodes        302
+/feed       /rss.xml         301

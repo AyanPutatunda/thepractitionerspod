@@ -1,0 +1,59 @@
+---
+import type { Episode } from '../lib/episodes';
+interface Props {
+  episode: Episode;
+}
+const { youtubeId, spotifyEpisodeId, audioUrl, title } = Astro.props.episode.data;
+---
+
+{
+  youtubeId ? (
+    <div class="embed">
+      <iframe
+        src={`https://www.youtube-nocookie.com/embed/${youtubeId}`}
+        title={title}
+        loading="lazy"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        referrerpolicy="strict-origin-when-cross-origin"
+        allowfullscreen
+      />
+    </div>
+  ) : spotifyEpisodeId ? (
+    <iframe
+      class="spotify"
+      src={`https://open.spotify.com/embed/episode/${spotifyEpisodeId}?theme=0`}
+      title={title}
+      height="232"
+      loading="lazy"
+      allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+    />
+  ) : audioUrl ? (
+    <audio controls preload="none" src={audioUrl} class="audio">
+      <a href={audioUrl}>Download audio</a>
+    </audio>
+  ) : (
+    <div class="pending card">
+      <span class="mono">// audio & video drop here on release day</span>
+    </div>
+  )
+}
+
+<style>
+  .spotify {
+    width: 100%;
+    border: 0;
+    border-radius: 12px;
+  }
+  .audio {
+    width: 100%;
+  }
+  .pending {
+    aspect-ratio: 21 / 9;
+    display: grid;
+    place-items: center;
+    background:
+      radial-gradient(circle at 70% 30%, var(--signal-soft), transparent 60%),
+      var(--ink-2);
+    text-align: center;
+  }
+</style>

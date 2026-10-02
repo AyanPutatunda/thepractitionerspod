@@ -1,0 +1,37 @@
+---
+// Netlify Forms picks this up at deploy time (data-netlify). Submissions land in
+// Netlify → Forms → "newsletter"; export them to your email tool when you pick one.
+interface Props {
+  compact?: boolean;
+}
+const { compact = false } = Astro.props;
+---
+
+<form
+  name="newsletter"
+  method="POST"
+  action="/thanks/?f=newsletter"
+  data-netlify="true"
+  netlify-honeypot="company_website"
+  class:list={['nl', { compact }]}
+>
+  <input type="hidden" name="form-name" value="newsletter" />
+  <p class="hidden"><label>Leave this empty <input name="company_website" tabindex="-1" autocomplete="off" /></label></p>
+  <label for={compact ? 'nl-email-c' : 'nl-email'} class="hidden">Email address</label>
+  <input id={compact ? 'nl-email-c' : 'nl-email'} type="email" name="email" required placeholder="you@company.com" autocomplete="email" />
+  <button class="btn btn-primary" type="submit">Notify me</button>
+</form>
+
+<style>
+  .nl {
+    display: flex;
+    gap: 10px;
+    max-width: 520px;
+    flex-wrap: wrap;
+  }
+  .nl input[type='email'] {
+    flex: 1 1 240px;
+    border-radius: 999px;
+    padding-inline: 1.2em;
+  }
+</style>

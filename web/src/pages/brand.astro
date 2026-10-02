@@ -1,0 +1,114 @@
+---
+import Base from '../layouts/Base.astro';
+import { site } from '../site.config';
+
+const assets = [
+  { file: '/brand/podcast-cover-3000.png', label: 'Podcast cover art', note: '3000 × 3000 PNG, ready for Apple & Spotify', preview: '/brand/podcast-cover-3000.png' },
+  { file: '/brand/logo-horizontal-light.svg', label: 'Horizontal logo, for dark backgrounds', note: 'SVG · PNG', png: '/brand/logo-horizontal-light.png', preview: '/brand/logo-horizontal-light.svg' },
+  { file: '/brand/logo-horizontal-dark.svg', label: 'Horizontal logo, for light backgrounds', note: 'SVG · PNG', png: '/brand/logo-horizontal-dark.png', preview: '/brand/logo-horizontal-dark.svg', light: true },
+  { file: '/brand/logo-mark.svg', label: 'App icon / avatar', note: 'SVG · 1024 PNG', png: '/brand/logo-mark-1024.png', preview: '/brand/logo-mark.svg' },
+  { file: '/brand/logo-stacked-light.svg', label: 'Stacked logo', note: 'SVG', preview: '/brand/logo-stacked-light.svg' },
+];
+const colors = [
+  ['Ink', '#0B0E14'],
+  ['Paper', '#F5F1E8'],
+  ['Signal', '#FF5B2E'],
+  ['Slate', '#9AA1AD'],
+];
+---
+
+<Base title="Brand kit" description={`Logos, cover art and colors for ${site.name}.`}>
+  <section class="section">
+    <div class="container">
+      <p class="eyebrow">Press & brand kit</p>
+      <h1>Brand kit</h1>
+      <p class="lede">
+        The mark is a “P” whose bowl is a pop filter holding a live waveform: the practitioner and the mic. Please don't
+        recolor, stretch or add effects.
+      </p>
+
+      <div class="grid grid-2 assets">
+        {
+          assets.map((a) => (
+            <div class:list={['card', 'asset', { light: a.light }]}>
+              <div class="pv"><img src={a.preview} alt={a.label} loading="lazy" /></div>
+              <h3>{a.label}</h3>
+              <p class="mono">{a.note}</p>
+              <p class="dl">
+                <a href={a.file} download>Download {a.file.split('.').pop()?.toUpperCase()}</a>
+                {a.png && <a href={a.png} download>Download PNG</a>}
+              </p>
+            </div>
+          ))
+        }
+      </div>
+
+      <h2>Colors</h2>
+      <div class="swatches">
+        {
+          colors.map(([n, hex]) => (
+            <div class="card sw">
+              <span style={`background:${hex}`} />
+              <strong>{n}</strong>
+              <code class="mono">{hex}</code>
+            </div>
+          ))
+        }
+      </div>
+
+      <h2>Type</h2>
+      <p class="muted">Space Grotesk (display) · Inter (body) · JetBrains Mono (labels)</p>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .assets {
+    margin: 40px 0 64px;
+  }
+  .pv {
+    background: var(--ink);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 28px;
+    display: grid;
+    place-items: center;
+    height: 220px;
+    margin-bottom: 18px;
+  }
+  .light .pv {
+    background: var(--paper);
+  }
+  .pv img {
+    max-height: 164px;
+    max-width: 100%;
+    object-fit: contain;
+  }
+  .dl {
+    display: flex;
+    gap: 16px;
+    margin: 0;
+  }
+  .dl a {
+    color: var(--signal);
+  }
+  .swatches {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 180px), 1fr));
+    gap: 16px;
+    margin-bottom: 48px;
+  }
+  .sw {
+    display: grid;
+    gap: 6px;
+  }
+  .sw span {
+    height: 72px;
+    border-radius: 8px;
+    border: 1px solid var(--line);
+    margin-bottom: 8px;
+  }
+  .muted {
+    color: var(--muted);
+  }
+</style>

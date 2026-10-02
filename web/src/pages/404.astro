@@ -1,0 +1,31 @@
+---
+import Base from '../layouts/Base.astro';
+---
+
+<Base title="Not found" noindex>
+  <section class="section">
+    <div class="container center">
+      <p class="eyebrow">404 · dead air</p>
+      <h1>This page went off-mic.</h1>
+      <p class="lede">The link may be old, or the episode may have moved.</p>
+      <div class="ctas">
+        <a class="btn btn-primary" href="/episodes">Browse episodes</a>
+        <a class="btn btn-ghost" href="/">Home</a>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .center {
+    text-align: center;
+    display: grid;
+    justify-items: center;
+  }
+  .ctas {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+</style>

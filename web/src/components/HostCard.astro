@@ -1,0 +1,95 @@
+---
+import Icon from './Icon.astro';
+import { site } from '../site.config';
+const { host } = site;
+interface Props {
+  full?: boolean;
+}
+const { full = false } = Astro.props;
+---
+
+<div class="host">
+  <div class="photo">
+    {host.photo ? <img src={host.photo} alt={host.name} width="480" height="480" /> : <span>AP</span>}
+  </div>
+  <div>
+    <h2>{host.name}</h2>
+    <p class="role mono">{host.role}</p>
+    <p>
+      I'm a Staff Data Engineer at Zendesk, where I architect the petabyte-scale data platforms behind production AI
+      applications. Day to day that means leading AI-readiness work: context governance, Model Context Protocol (MCP)
+      architectures, and agentic frameworks that safely connect LLM agents to governed enterprise data.
+    </p>
+    {
+      full && (
+        <p>
+          I spend most of my time where the modern data stack meets generative AI, automating complex workflows across
+          dbt, Snowflake and Airflow. I speak about this at events like dbt Summit and the Applied AI Summit, and the
+          best part is always the hallway conversations afterwards. That's where people tell you what <em>actually</em> happened.
+        </p>
+      )
+    }
+    <p>
+      I started The Practitioners Pod to put those hallway conversations on the record. Every guest is someone who has
+      shipped the thing, broken it, and fixed it.
+    </p>
+    <div class="links">
+      <a class="btn btn-ghost" href={host.linkedin} target="_blank" rel="noopener"><Icon name="linkedin" /> LinkedIn</a>
+      <a class="btn btn-ghost" href={host.website} target="_blank" rel="noopener"><Icon name="globe" /> ayanputatunda.com</a>
+    </div>
+  </div>
+</div>
+
+<style>
+  .host {
+    display: grid;
+    grid-template-columns: minmax(180px, 320px) 1fr;
+    gap: clamp(24px, 5vw, 64px);
+    align-items: center;
+  }
+  @media (max-width: 760px) {
+    .host {
+      grid-template-columns: 1fr;
+    }
+    .photo {
+      max-width: 220px;
+    }
+  }
+  .photo {
+    aspect-ratio: 1;
+    border-radius: var(--radius);
+    overflow: hidden;
+    border: 1px solid var(--line);
+    background:
+      radial-gradient(circle at 70% 25%, rgba(255, 91, 46, 0.28), transparent 55%),
+      var(--ink-3);
+    display: grid;
+    place-items: center;
+  }
+  .photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .photo span {
+    font-family: var(--font-display);
+    font-size: 5rem;
+    font-weight: 700;
+    letter-spacing: -0.05em;
+    color: var(--paper);
+  }
+  .role {
+    color: var(--signal);
+    margin-top: -6px;
+  }
+  p {
+    color: var(--muted);
+    max-width: 62ch;
+  }
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 20px;
+  }
+</style>

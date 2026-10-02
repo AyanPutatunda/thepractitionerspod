@@ -1,0 +1,10 @@
+# Netlify config. Deploys normally come from GitHub Actions (.github/workflows/deploy.yml),
+# which builds the site and uploads web/dist with the Netlify CLI. These settings also let
+# Netlify build the site itself if you ever connect the repo directly in the Netlify UI.
+[build]
+  base    = "web"
+  command = "npm ci && npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "22"
