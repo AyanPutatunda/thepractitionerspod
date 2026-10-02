@@ -1,5 +1,7 @@
 name: Build & deploy
 
+# Push to main → build and deploy to Netlify production.
+# Pull request  → build, plus a Netlify preview deploy for PRs from this repo.
 on:
   push:
     branches: [main]
@@ -14,72 +16,55 @@ permissions:
   contents: read
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: web
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: npm
-          cache-dependency-path: web/package-lock.json
-
-      - run: npm ci
-      - run: npm run build # type-checks (astro check) and builds to web/dist
-
-      - uses: actions/upload-artifact@v4
-        with:
-          name: site
-          path: web/dist
-          retention-days: 7
-
   deploy:
-    needs: build
     runs-on: ubuntu-latest
-    # Production on pushes to main; preview deploys for PRs from this repo.
-    # Forked PRs never see the secrets, so they only get the build check.
-    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
     environment:
       name: ${{ github.ref == 'refs/heads/main' && 'production' || 'preview' }}
       url: ${{ steps.deploy.outputs.url }}
     env:
       NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
       NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+      IS_MAIN: ${{ github.ref == 'refs/heads/main' }}
     steps:
-      - uses: actions/checkout@v4 # for netlify.toml
+      - uses: actions/checkout@v5
 
-      - uses: actions/download-artifact@v4
-        with:
-          name: site
-          path: web/dist
-
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5
         with:
           node-version: 22
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+
+      - name: Install
+        working-directory: web
+        run: npm ci
+
+      - name: Build
+        working-directory: web
+        run: npm run build # astro check + astro build → web/dist
 
       - name: Check Netlify secrets
+        id: secrets
         run: |
-          if [ -z "$NETLIFY_AUTH_TOKEN" ] || [ -z "$NETLIFY_SITE_ID" ]; then
-            echo "::error::Add NETLIFY_AUTH_TOKEN and NETLIFY_SITE_ID in Settings → Secrets and variables → Actions."
+          if [ -n "$NETLIFY_AUTH_TOKEN" ] && [ -n "$NETLIFY_SITE_ID" ]; then
+            echo "ok=true" >> "$GITHUB_OUTPUT"
+          elif [ "$IS_MAIN" = "true" ]; then
+            echo "::error::NETLIFY_AUTH_TOKEN and/or NETLIFY_SITE_ID are missing. Add them under Settings → Secrets and variables → Actions → Repository secrets."
             exit 1
+          else
+            # Forked PRs (and repos without secrets yet) still get the build check.
+            echo "::warning::Netlify secrets not available; skipping preview deploy."
+            echo "ok=false" >> "$GITHUB_OUTPUT"
           fi
 
       - name: Deploy to Netlify
         id: deploy
+        if: steps.secrets.outputs.ok == 'true'
         env:
           # Passed via env (not inlined) so commit messages can't inject shell.
           DEPLOY_MSG: ${{ github.event.head_commit.message || github.event.pull_request.title || 'manual deploy' }}
           ALIAS: pr-${{ github.event.pull_request.number || github.run_number }}
         run: |
-          if [ "${{ github.ref }}" = "refs/heads/main" ]; then
-            FLAGS="--prod"
-          else
-            FLAGS="--alias $ALIAS"
-          fi
+          if [ "$IS_MAIN" = "true" ]; then FLAGS="--prod"; else FLAGS="--alias $ALIAS"; fi
           npx --yes netlify-cli@27 deploy \
             --dir "$GITHUB_WORKSPACE/web/dist" \
             --no-build \
