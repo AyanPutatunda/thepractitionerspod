@@ -40,3 +40,6 @@ prisma/dev.db-journal
 # specification document (keeping it out of version control)
 *.pdf
 
+
+# local preview screenshots
+/screenshots/

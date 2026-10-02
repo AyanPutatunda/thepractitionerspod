@@ -1,0 +1,34 @@
+---
+import Icon from './Icon.astro';
+import { activePlatforms } from '../site.config';
+---
+
+{
+  activePlatforms.length > 0 ? (
+    <ul class="platforms">
+      {activePlatforms.map((p) => (
+        <li>
+          <a class="btn btn-ghost" href={p.url} target="_blank" rel="noopener">
+            <Icon name={p.key} /> {p.label}
+          </a>
+        </li>
+      ))}
+    </ul>
+  ) : (
+    <p class="soon mono">Launching on YouTube, Spotify &amp; Apple Podcasts soon.</p>
+  )
+}
+
+<style>
+  .platforms {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .soon {
+    margin: 0;
+  }
+</style>

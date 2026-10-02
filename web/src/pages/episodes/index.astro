@@ -1,0 +1,28 @@
+---
+import Base from '../../layouts/Base.astro';
+import EpisodeCard from '../../components/EpisodeCard.astro';
+import Platforms from '../../components/Platforms.astro';
+import { getEpisodes } from '../../lib/episodes';
+
+const episodes = await getEpisodes();
+---
+
+<Base title="Episodes" description="Every episode of The Practitioners Pod: conversations with data, AI and platform engineers about building in production.">
+  <section class="section">
+    <div class="container">
+      <p class="eyebrow">All episodes</p>
+      <h1>Episodes</h1>
+      <p class="lede">Every conversation, newest first.</p>
+      <div class="plat"><Platforms /></div>
+      <div class="grid grid-3">
+        {episodes.map((ep) => <EpisodeCard episode={ep} />)}
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .plat {
+    margin: 24px 0 48px;
+  }
+</style>

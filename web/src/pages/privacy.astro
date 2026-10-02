@@ -1,0 +1,32 @@
+---
+import Base from '../layouts/Base.astro';
+import { site } from '../site.config';
+---
+
+<Base title="Privacy" description="How The Practitioners Pod handles your data.">
+  <section class="section">
+    <div class="container prose">
+      <p class="eyebrow">Legal</p>
+      <h1>Privacy policy</h1>
+      <p class="mono">Last updated: October 2, 2026</p>
+      <p>This site is intentionally simple. Here's exactly what we collect and why.</p>
+      <h2>What we collect</h2>
+      <ul>
+        <li><strong>Newsletter:</strong> your email address, used only to tell you about new episodes.</li>
+        <li><strong>Guest applications and contact forms:</strong> the details you submit, used only to respond to you and evaluate guest fit.</li>
+        <li><strong>Hosting logs:</strong> our host (Netlify) keeps standard server logs, such as IP address and user agent, for security and reliability.</li>
+      </ul>
+      <p>We don't sell or rent your data, and we don't use advertising trackers. Form submissions are stored by Netlify, our form processor.</p>
+      <h2>Embedded players</h2>
+      <p>
+        Episode pages may embed YouTube (privacy-enhanced mode) or Spotify players. Those services may set their own cookies when you
+        press play; their privacy policies apply.
+      </p>
+      <h2>Your choices</h2>
+      <p>
+        You can unsubscribe from emails at any time, or ask us to delete anything you've submitted by writing to
+        <a href={`mailto:${site.email}`}>{site.email}</a>.
+      </p>
+    </div>
+  </section>
+</Base>

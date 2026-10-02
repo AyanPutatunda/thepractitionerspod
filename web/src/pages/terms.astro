@@ -1,0 +1,28 @@
+---
+import Base from '../layouts/Base.astro';
+import { site } from '../site.config';
+---
+
+<Base title="Terms" description="Terms of use for The Practitioners Pod website.">
+  <section class="section">
+    <div class="container prose">
+      <p class="eyebrow">Legal</p>
+      <h1>Terms of use</h1>
+      <p class="mono">Last updated: October 2, 2026</p>
+      <h2>Content</h2>
+      <p>
+        Episodes, show notes and artwork are © {site.name}. You're welcome to quote and link to episodes with attribution. Please
+        don't republish full episodes without permission.
+      </p>
+      <h2>Opinions</h2>
+      <p>
+        Views expressed by the host and guests are their own and do not represent their employers. Nothing on the show is
+        professional, legal or financial advice.
+      </p>
+      <h2>Links</h2>
+      <p>We link to third-party sites and tools. We're not responsible for their content or practices.</p>
+      <h2>Contact</h2>
+      <p>Questions? <a href={`mailto:${site.email}`}>{site.email}</a></p>
+    </div>
+  </section>
+</Base>

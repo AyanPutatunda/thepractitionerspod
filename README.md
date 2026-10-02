@@ -1,3 +1,9 @@
+> **The live site is in [`web/`](./web).** See [`web/README.md`](./web/README.md) for local dev, the launch checklist (Netlify + GitHub Actions + domain), and how to publish episodes.
+>
+> Everything below this note describes an earlier Next.js + Supabase prototype (`app/`, `components/`, `lib/`, `prisma/`). It is not built or deployed and can be deleted.
+
+---
+
 # The Practitioners Pod - Website
 
 A professional podcast platform featuring tech industry leaders with an integrated guest management system. Built with Next.js 14, TypeScript, Tailwind CSS, and Prisma.

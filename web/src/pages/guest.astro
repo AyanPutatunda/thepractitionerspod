@@ -1,0 +1,102 @@
+---
+import Base from '../layouts/Base.astro';
+
+const looking = [
+  "You've built, operated or led production systems: data platforms, ML/LLM systems, infra, developer tooling.",
+  'You have a specific story: a migration, an incident, a bet that paid off (or didn\'t).',
+  'You can talk candidly about trade-offs. We can always keep sensitive details off the record.',
+];
+---
+
+<Base title="Be a guest" description="Apply to be a guest on The Practitioners Pod. We want practitioners with real production stories.">
+  <section class="section">
+    <div class="container layout">
+      <div>
+        <p class="eyebrow">Be a guest</p>
+        <h1>Tell us what you've shipped.</h1>
+        <p class="lede">We're booking conversations with engineers, data and ML practitioners, and technical leaders.</p>
+        <h3>Who we're looking for</h3>
+        <ul class="list">{looking.map((l) => <li>{l}</li>)}</ul>
+        <h3>How it works</h3>
+        <ol class="list">
+          <li>Apply below. It takes about 5 minutes.</li>
+          <li>If it's a fit, we'll set up a 20-minute intro call within two weeks.</li>
+          <li>We record remotely for about 60 minutes. You get to review the edit before it's published.</li>
+        </ol>
+      </div>
+
+      <form
+        class="form card"
+        name="guest-application"
+        method="POST"
+        action="/thanks/?f=guest"
+        data-netlify="true"
+        netlify-honeypot="company_website"
+      >
+        <input type="hidden" name="form-name" value="guest-application" />
+        <p class="hidden"><label>Leave this empty <input name="company_website" tabindex="-1" autocomplete="off" /></label></p>
+        <div class="row">
+          <div class="field"><label for="g-name">Full name</label><input id="g-name" name="name" required autocomplete="name" /></div>
+          <div class="field"><label for="g-email">Email</label><input id="g-email" name="email" type="email" required autocomplete="email" /></div>
+        </div>
+        <div class="row">
+          <div class="field"><label for="g-role">Role / title</label><input id="g-role" name="role" required /></div>
+          <div class="field"><label for="g-company">Company</label><input id="g-company" name="company" /></div>
+        </div>
+        <div class="field">
+          <label for="g-linkedin">LinkedIn or website</label>
+          <input id="g-linkedin" name="linkedin" type="url" placeholder="https://" required />
+        </div>
+        <div class="field">
+          <label for="g-area">Primary area</label>
+          <select id="g-area" name="area" required>
+            <option value="">Choose one…</option>
+            <option>Data engineering / analytics engineering</option>
+            <option>AI / ML / LLM systems</option>
+            <option>Platform / infrastructure / SRE</option>
+            <option>Software architecture</option>
+            <option>Engineering leadership</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="g-topic">What would you like to talk about? <span class="hint">Pitch 1–3 topics, with the more specific the better.</span></label>
+          <textarea id="g-topic" name="topics" required></textarea>
+        </div>
+        <div class="field">
+          <label for="g-story">A production story you could tell <span class="hint">An incident, a migration, a hard trade-off.</span></label>
+          <textarea id="g-story" name="story"></textarea>
+        </div>
+        <div class="field">
+          <label for="g-links">Previous talks, posts or podcasts <span class="hint">Optional</span></label>
+          <input id="g-links" name="previous_appearances" />
+        </div>
+        <button class="btn btn-primary" type="submit">Send application</button>
+      </form>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .layout {
+    display: grid;
+    grid-template-columns: 1fr 1.1fr;
+    gap: clamp(32px, 5vw, 72px);
+    align-items: start;
+  }
+  @media (max-width: 900px) {
+    .layout {
+      grid-template-columns: 1fr;
+    }
+  }
+  h3 {
+    margin-top: 2em;
+  }
+  .list {
+    color: var(--muted);
+    padding-left: 1.2em;
+  }
+  .list li {
+    margin-bottom: 0.6em;
+  }
+</style>

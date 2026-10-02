@@ -1,0 +1,295 @@
+---
+import Base from '../layouts/Base.astro';
+import EpisodeCard from '../components/EpisodeCard.astro';
+import Platforms from '../components/Platforms.astro';
+import Player from '../components/Player.astro';
+import Newsletter from '../components/Newsletter.astro';
+import HostCard from '../components/HostCard.astro';
+import Icon from '../components/Icon.astro';
+import { getEpisodes, epLabel, formatDate } from '../lib/episodes';
+
+const episodes = await getEpisodes();
+const latest = episodes[0];
+const recent = episodes.slice(1, 7);
+
+const topics = [
+  {
+    title: 'Data platforms at scale',
+    body: 'dbt, Snowflake, Airflow, and the unglamorous plumbing that keeps petabytes moving and trustworthy.',
+  },
+  {
+    title: 'AI in production',
+    body: 'Context governance, MCP, agentic workflows: wiring LLMs to real enterprise data without losing sleep.',
+  },
+  {
+    title: 'Engineering judgment',
+    body: 'Build vs. buy, migrations, incidents, and the trade-offs that never make it into the blog post.',
+  },
+  {
+    title: 'Careers in the craft',
+    body: 'How senior ICs and leaders grow, and what they would tell themselves five years ago.',
+  },
+];
+---
+
+<Base>
+  <section class="hero">
+    <div class="container hero-grid">
+      <div>
+        <p class="eyebrow">A tech podcast for builders</p>
+        <h1>Real talk from people who <span class="hl">build in production.</span></h1>
+        <p class="lede">
+          Long-form conversations with the data, AI and platform engineers who own the pager. Hosted by Ayan Putatunda.
+        </p>
+        <div class="ctas">
+          {
+            latest && (
+              <a href={`/episodes/${latest.id}`} class="btn btn-primary">
+                <Icon name="play" /> Play latest episode
+              </a>
+            )
+          }
+          <a href="#subscribe" class="btn btn-ghost">Subscribe</a>
+        </div>
+        <Platforms />
+      </div>
+
+      <div class="hero-art" aria-hidden="true">
+        <div class="wave">
+          {Array.from({ length: 28 }, (_, i) => <span style={`--h:${20 + Math.round(70 * Math.abs(Math.sin(i * 0.7) * Math.cos(i * 0.23)))}%;--d:${(i % 7) * 0.12}s`} />)}
+        </div>
+        <div class="now mono">
+          <span class="dot"></span> ON AIR · {latest ? epLabel(latest.data.number) : 'SOON'}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {
+    latest && (
+      <section class="section" id="latest">
+        <div class="container">
+          <p class="eyebrow">Latest episode</p>
+          <div class="latest">
+            <Player episode={latest} />
+            <div>
+              <p class="mono">
+                {epLabel(latest.data.number)} · {formatDate(latest.data.pubDate)}
+                {latest.data.duration && ` · ${latest.data.duration}`}
+              </p>
+              <h2>{latest.data.title}</h2>
+              {latest.data.guests.length > 0 && (
+                <p class="with">with {latest.data.guests.map((g) => g.name).join(', ')}</p>
+              )}
+              <p class="lede">{latest.data.description}</p>
+              <a href={`/episodes/${latest.id}`} class="btn btn-ghost">
+                Show notes <Icon name="arrow" />
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  <section class="section">
+    <div class="container">
+      <p class="eyebrow">What we talk about</p>
+      <h2>No hype. No vendor pitches.<br />Just practitioners talking shop.</h2>
+      <div class="grid topics">
+        {
+          topics.map((t, i) => (
+            <div class="card topic">
+              <span class="mono">0{i + 1}</span>
+              <h3>{t.title}</h3>
+              <p>{t.body}</p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  {
+    recent.length > 0 && (
+      <section class="section">
+        <div class="container">
+          <div class="head">
+            <div>
+              <p class="eyebrow">More episodes</p>
+              <h2>Catch up</h2>
+            </div>
+            <a href="/episodes" class="btn btn-ghost">
+              All episodes <Icon name="arrow" />
+            </a>
+          </div>
+          <div class="grid grid-3">
+            {recent.map((ep) => (
+              <EpisodeCard episode={ep} />
+            ))}
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  <section class="section">
+    <div class="container">
+      <p class="eyebrow">Your host</p>
+      <HostCard />
+    </div>
+  </section>
+
+  <section class="section" id="subscribe">
+    <div class="container grid grid-2">
+      <div class="card cta">
+        <p class="eyebrow">Never miss an episode</p>
+        <h2>Get new episodes in your inbox</h2>
+        <p class="muted">One email per episode with the show notes and links. Nothing else, and you can unsubscribe anytime.</p>
+        <Newsletter />
+        <div class="plat"><Platforms /></div>
+      </div>
+      <div class="card cta alt">
+        <p class="eyebrow">Be on the show</p>
+        <h2>Shipped something worth talking about?</h2>
+        <p class="muted">
+          We're looking for engineers, data and ML practitioners and technical leaders with real production stories, scars included.
+        </p>
+        <a href="/guest" class="btn btn-primary">Apply to be a guest <Icon name="arrow" /></a>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .hero {
+    padding-block: clamp(56px, 10vw, 120px) clamp(48px, 8vw, 96px);
+    background:
+      radial-gradient(60% 80% at 85% 10%, rgba(255, 91, 46, 0.16), transparent 60%),
+      linear-gradient(transparent 0 calc(100% - 1px), rgba(255, 255, 255, 0.035) 0) 0 0 / 100% 64px,
+      linear-gradient(90deg, transparent 0 calc(100% - 1px), rgba(255, 255, 255, 0.025) 0) 0 0 / 64px 100%;
+    border-bottom: 1px solid var(--line);
+  }
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1.35fr 1fr;
+    gap: clamp(32px, 6vw, 80px);
+    align-items: center;
+  }
+  @media (max-width: 900px) {
+    .hero-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+  .hl {
+    color: var(--signal);
+  }
+  .ctas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin: 32px 0 28px;
+  }
+  .hero-art {
+    position: relative;
+    aspect-ratio: 1;
+    max-width: 440px;
+    width: 100%;
+    justify-self: center;
+    border-radius: 50%;
+    border: 1px solid var(--line);
+    background: radial-gradient(circle, var(--ink-3) 0 55%, var(--ink-2) 56% 100%);
+    display: grid;
+    place-items: center;
+    box-shadow: 0 0 0 18px rgba(255, 91, 46, 0.05), 0 0 0 36px rgba(255, 91, 46, 0.025);
+  }
+  .wave {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    height: 46%;
+    width: 72%;
+  }
+  .wave span {
+    flex: 1;
+    height: var(--h);
+    border-radius: 99px;
+    background: var(--paper);
+    animation: pulse 1.6s ease-in-out var(--d) infinite alternate;
+  }
+  .wave span:nth-child(3n) {
+    background: var(--signal);
+  }
+  @keyframes pulse {
+    to {
+      transform: scaleY(0.45);
+    }
+  }
+  .now {
+    position: absolute;
+    bottom: 14%;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--paper);
+  }
+  .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--signal);
+    box-shadow: 0 0 12px var(--signal);
+  }
+  .latest {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+    gap: clamp(24px, 4vw, 56px);
+    align-items: center;
+  }
+  @media (max-width: 900px) {
+    .latest {
+      grid-template-columns: 1fr;
+    }
+  }
+  .with {
+    color: var(--paper);
+    font-weight: 500;
+  }
+  .topics {
+    margin-top: 40px;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+  }
+  .topic .mono {
+    color: var(--signal);
+  }
+  .topic h3 {
+    margin-top: 28px;
+  }
+  .topic p {
+    color: var(--muted);
+    margin: 0;
+    font-size: 0.95rem;
+  }
+  .head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: end;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+  .cta {
+    padding: clamp(28px, 4vw, 48px);
+  }
+  .cta.alt {
+    background:
+      radial-gradient(80% 80% at 100% 0%, rgba(255, 91, 46, 0.14), transparent 60%),
+      var(--ink-2);
+  }
+  .muted {
+    color: var(--muted);
+  }
+  .plat {
+    margin-top: 24px;
+  }
+</style>

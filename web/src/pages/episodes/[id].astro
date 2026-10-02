@@ -1,0 +1,185 @@
+---
+import { render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Player from '../../components/Player.astro';
+import Platforms from '../../components/Platforms.astro';
+import Newsletter from '../../components/Newsletter.astro';
+import Icon from '../../components/Icon.astro';
+import { getEpisodes, epLabel, formatDate, type Episode } from '../../lib/episodes';
+import { site } from '../../site.config';
+
+export async function getStaticPaths() {
+  const episodes = await getEpisodes();
+  return episodes.map((episode, i) => ({
+    params: { id: episode.id },
+    props: { episode, newer: episodes[i - 1], older: episodes[i + 1] },
+  }));
+}
+
+interface Props {
+  episode: Episode;
+  newer?: Episode;
+  older?: Episode;
+}
+const { episode, newer, older } = Astro.props;
+const { Content } = await render(episode);
+const d = episode.data;
+const image = d.youtubeId ? `https://i.ytimg.com/vi/${d.youtubeId}/maxresdefault.jpg` : undefined;
+const pageUrl = new URL(Astro.url.pathname, Astro.site).href;
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'PodcastEpisode',
+  name: d.title,
+  episodeNumber: d.number,
+  datePublished: d.pubDate.toISOString(),
+  description: d.description,
+  url: pageUrl,
+  partOfSeries: { '@type': 'PodcastSeries', name: site.name, url: site.url },
+  ...(d.audioUrl ? { associatedMedia: { '@type': 'MediaObject', contentUrl: d.audioUrl } } : {}),
+};
+const share = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(pageUrl)}`;
+---
+
+<Base title={d.title} description={d.description} image={image} type="article" jsonLd={jsonLd}>
+  <article class="section">
+    <div class="container">
+      <a href="/episodes" class="back mono">← All episodes</a>
+      <p class="eyebrow">{epLabel(d.number)} · Season {d.season}</p>
+      <h1>{d.title}</h1>
+      <p class="mono meta">
+        {formatDate(d.pubDate)}{d.duration && ` · ${d.duration}`}
+      </p>
+      {
+        d.guests.length > 0 && (
+          <ul class="guests">
+            {d.guests.map((g) => (
+              <li class="card">
+                <strong>{g.url ? <a href={g.url} target="_blank" rel="noopener">{g.name}</a> : g.name}</strong>
+                {(g.role || g.company) && <span>{[g.role, g.company].filter(Boolean).join(' · ')}</span>}
+              </li>
+            ))}
+          </ul>
+        )
+      }
+
+      <div class="player"><Player episode={episode} /></div>
+
+      <div class="layout">
+        <div class="prose">
+          <p class="lede">{d.description}</p>
+          <Content />
+        </div>
+        <aside>
+          <div class="card">
+            <h4>Listen</h4>
+            <Platforms />
+            {d.appleUrl && <p><a href={d.appleUrl} target="_blank" rel="noopener">Open in Apple Podcasts</a></p>}
+          </div>
+          {
+            d.topics.length > 0 && (
+              <div class="card">
+                <h4>Topics</h4>
+                <div class="tags">{d.topics.map((t) => <span class="tag">{t}</span>)}</div>
+              </div>
+            )
+          }
+          <div class="card">
+            <h4>Share</h4>
+            <a class="btn btn-ghost" href={share} target="_blank" rel="noopener"><Icon name="linkedin" /> Share on LinkedIn</a>
+          </div>
+          <div class="card">
+            <h4>New episodes by email</h4>
+            <Newsletter compact />
+          </div>
+        </aside>
+      </div>
+
+      <nav class="pager" aria-label="More episodes">
+        {newer ? <a href={`/episodes/${newer.id}`} class="card"><span class="mono">Newer</span>{newer.data.title}</a> : <span />}
+        {older && <a href={`/episodes/${older.id}`} class="card right"><span class="mono">Older</span>{older.data.title}</a>}
+      </nav>
+    </div>
+  </article>
+</Base>
+
+<style>
+  .back {
+    text-decoration: none;
+    display: block;
+    width: fit-content;
+    margin-bottom: 28px;
+  }
+  .meta {
+    margin-bottom: 24px;
+  }
+  .guests {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin: 0 0 32px;
+  }
+  .guests li {
+    display: grid;
+    padding: 14px 18px;
+  }
+  .guests span {
+    color: var(--muted);
+    font-size: 0.88rem;
+  }
+  .player {
+    margin-bottom: 48px;
+  }
+  .layout {
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: clamp(32px, 5vw, 64px);
+    align-items: start;
+  }
+  @media (max-width: 900px) {
+    .layout {
+      grid-template-columns: 1fr;
+    }
+  }
+  aside {
+    display: grid;
+    gap: 16px;
+    position: sticky;
+    top: 96px;
+  }
+  aside h4 {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+    font-weight: 500;
+  }
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .pager {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 64px;
+  }
+  .pager a {
+    text-decoration: none;
+    display: grid;
+    gap: 4px;
+    font-weight: 600;
+    color: var(--paper);
+  }
+  .pager a:hover {
+    border-color: var(--signal);
+  }
+  .right {
+    text-align: right;
+    grid-column: 2;
+  }
+</style>

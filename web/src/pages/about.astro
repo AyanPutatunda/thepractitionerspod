@@ -1,0 +1,83 @@
+---
+import Base from '../layouts/Base.astro';
+import HostCard from '../components/HostCard.astro';
+import Icon from '../components/Icon.astro';
+import { site } from '../site.config';
+
+const principles = [
+  ['Practitioners only', 'Every guest has built, run or led the thing they talk about. Titles matter less than scars.'],
+  ['Depth over breadth', 'Episodes run 45–60 minutes so we can get past the talking points and into the decisions.'],
+  ['No pitches', "Guests can talk about their company's work, but not sell it. Sponsors never pick topics or guests."],
+  ['Useful on Monday', 'You should leave every episode with something you can try, question or steal for your own team.'],
+];
+---
+
+<Base title="About" description={`About ${site.name}, the podcast, the format, and host ${site.host.name}.`}>
+  <section class="section">
+    <div class="container">
+      <p class="eyebrow">About the show</p>
+      <h1>The hallway track, on the record.</h1>
+      <p class="lede">
+        The best engineering insight rarely makes it into a keynote. It shows up in the hallway afterwards: what broke,
+        what it cost, what you'd do differently. {site.name} records those conversations with the people who build data,
+        AI and platform systems in production.
+      </p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <p class="eyebrow">How we do it</p>
+      <div class="grid grid-2">
+        {
+          principles.map(([t, b], i) => (
+            <div class="card">
+              <span class="mono num">0{i + 1}</span>
+              <h3>{t}</h3>
+              <p class="muted">{b}</p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <p class="eyebrow">Your host</p>
+      <HostCard full />
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container cta">
+      <h2>Want to be on the show, or sponsor it?</h2>
+      <div class="ctas">
+        <a class="btn btn-primary" href="/guest">Apply to be a guest <Icon name="arrow" /></a>
+        <a class="btn btn-ghost" href="/contact">Partnerships</a>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .num {
+    color: var(--signal);
+  }
+  .card h3 {
+    margin-top: 20px;
+  }
+  .muted {
+    color: var(--muted);
+    margin: 0;
+  }
+  .ctas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: center;
+  }
+  .cta {
+    text-align: center;
+  }
+</style>

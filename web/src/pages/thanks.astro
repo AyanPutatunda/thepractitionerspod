@@ -1,0 +1,36 @@
+---
+import Base from '../layouts/Base.astro';
+---
+
+<Base title="Thanks" noindex>
+  <section class="section">
+    <div class="container center">
+      <p class="eyebrow">Received</p>
+      <h1 id="t-title">Thank you!</h1>
+      <p class="lede" id="t-body">Your message is in. We'll get back to you soon.</p>
+      <a class="btn btn-ghost" href="/">Back to home</a>
+    </div>
+  </section>
+</Base>
+
+<script>
+  const copy: Record<string, [string, string]> = {
+    newsletter: ["You're on the list.", "We'll email you when the next episode drops."],
+    guest: ['Application received.', "Thanks for raising your hand. If it's a fit, we'll reach out within two weeks to set up an intro call."],
+    contact: ['Message sent.', "Thanks for reaching out. We'll reply as soon as we can."],
+  };
+  const f = new URLSearchParams(location.search).get('f') ?? '';
+  const c = copy[f];
+  if (c) {
+    document.getElementById('t-title')!.textContent = c[0];
+    document.getElementById('t-body')!.textContent = c[1];
+  }
+</script>
+
+<style>
+  .center {
+    text-align: center;
+    display: grid;
+    justify-items: center;
+  }
+</style>
