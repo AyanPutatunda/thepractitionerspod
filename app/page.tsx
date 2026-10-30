@@ -92,31 +92,35 @@ export default async function HomePage() {
         <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-white to-transparent"></div>
       </section>
 
-      {/* Stats Section */}
-      <section className="py-12 bg-neutral-50">
-        <div className="container-custom">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="text-center">
-              <div className="text-4xl md:text-5xl font-bold text-primary mb-2">
-                {stats.episodes}+
+      {/* Counts render only once there is something real to show. */}
+      {(stats.episodes > 0 || stats.guests > 0 || stats.views > 0) && (
+        <section className="py-12 bg-neutral-50">
+          <div className="container-custom">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              <div className="text-center">
+                <div className="text-4xl md:text-5xl font-bold text-primary mb-2">
+                  {stats.episodes}+
+                </div>
+                <div className="text-text-secondary">Episodes Published</div>
               </div>
-              <div className="text-text-secondary">Episodes Published</div>
-            </div>
-            <div className="text-center">
-              <div className="text-4xl md:text-5xl font-bold text-primary mb-2">
-                {stats.guests}+
+              <div className="text-center">
+                <div className="text-4xl md:text-5xl font-bold text-primary mb-2">
+                  {stats.guests}+
+                </div>
+                <div className="text-text-secondary">Industry Leaders</div>
               </div>
-              <div className="text-text-secondary">Industry Leaders</div>
-            </div>
-            <div className="text-center">
-              <div className="text-4xl md:text-5xl font-bold text-primary mb-2">
-                {(stats.views / 1000).toFixed(0)}K+
+              <div className="text-center">
+                <div className="text-4xl md:text-5xl font-bold text-primary mb-2">
+                  {stats.views >= 1000
+                  ? `${Math.floor(stats.views / 1000)}K+`
+                  : stats.views.toLocaleString()}
+                </div>
+                <div className="text-text-secondary">Total Views</div>
               </div>
-              <div className="text-text-secondary">Total Views</div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* Latest Episodes Section */}
       <section className="section-spacing">
@@ -276,7 +280,7 @@ export default async function HomePage() {
           <div className="max-w-3xl mx-auto text-center">
             <h2 className="text-primary mb-6">Want to Share Your Story?</h2>
             <p className="text-xl text-text-secondary mb-10">
-              We're always looking for experienced practitioners with unique insights to share. Apply to be a guest on the show.
+              We&apos;re always looking for experienced practitioners with unique insights to share. Apply to be a guest on the show.
             </p>
             <Link href="/apply" className="btn-primary text-lg px-10 py-4">
               Apply to Be a Guest

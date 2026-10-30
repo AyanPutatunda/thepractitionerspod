@@ -1,10 +1,11 @@
 import { notFound } from 'next/navigation'
-import { Calendar, Clock, Share2, ArrowLeft } from 'lucide-react'
+import { Calendar, Clock, ArrowLeft } from 'lucide-react'
 import { format } from 'date-fns'
 import Link from 'next/link'
 import { prisma } from '@/lib/prisma'
 import YouTubePlayer from '@/components/YouTubePlayer'
 import EpisodeCard from '@/components/EpisodeCard'
+import ShareEpisodeButton from '@/components/ShareEpisodeButton'
 
 interface EpisodePageProps {
   params: {
@@ -213,25 +214,7 @@ export default async function EpisodePage({ params }: EpisodePageProps) {
               </details>
             )}
 
-            {/* Share Button */}
-            <button
-              onClick={() => {
-                if (navigator.share) {
-                  navigator.share({
-                    title: episode.title,
-                    text: episode.description,
-                    url: window.location.href,
-                  })
-                } else {
-                  navigator.clipboard.writeText(window.location.href)
-                  alert('Link copied to clipboard!')
-                }
-              }}
-              className="btn-secondary"
-            >
-              <Share2 className="w-4 h-4 mr-2" />
-              Share Episode
-            </button>
+            <ShareEpisodeButton title={episode.title} description={episode.description} />
           </div>
         </div>
 
