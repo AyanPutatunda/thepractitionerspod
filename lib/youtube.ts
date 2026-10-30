@@ -113,7 +113,7 @@ export async function getVideoById(videoId: string): Promise<YouTubeVideo | null
   }
 }
 
-function parseDuration(isoDuration: string): string {
+export function parseDuration(isoDuration: string): string {
   const match = isoDuration.match(/PT(\d+H)?(\d+M)?(\d+S)?/)
   
   if (!match) return '0:00'
