@@ -1,3 +1,5 @@
+> **Historical.** Phase 0 does not create a hosted Supabase project. Schema changes belong in `supabase/migrations`, not `prisma db push`. Follow the root [README](./README.md) and [PROGRESS.md](./PROGRESS.md).
+
 # Supabase Setup Guide
 
 This project now uses **Supabase** for both authentication and database. This guide will walk you through the complete setup.
