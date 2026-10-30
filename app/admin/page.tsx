@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { prisma } from '@/lib/prisma'
-import { Users, FileText, Mail, MessageSquare } from 'lucide-react'
+import { Users, FileText, MessageSquare } from 'lucide-react'
 import Link from 'next/link'
 import LogoutButton from '@/components/LogoutButton'
 

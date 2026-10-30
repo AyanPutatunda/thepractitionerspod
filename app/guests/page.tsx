@@ -170,7 +170,7 @@ export default async function GuestsPage() {
             Want to Be Featured?
           </h2>
           <p className="text-text-secondary mb-8 max-w-2xl mx-auto">
-            We're always looking for experienced tech practitioners to share their insights and stories. Apply to be a guest on the show.
+            We&apos;re always looking for experienced tech practitioners to share their insights and stories. Apply to be a guest on the show.
           </p>
           <Link href="/apply" className="btn-primary">
             Apply to Be a Guest

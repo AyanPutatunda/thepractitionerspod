@@ -72,10 +72,10 @@ export default function ApplyPage() {
             </div>
           </div>
 
-          {/* Who We're Looking For */}
+          {/* Who we are looking for */}
           <div className="mb-12">
             <h3 className="text-2xl font-semibold text-primary mb-6">
-              Who We're Looking For
+              Who We&apos;re Looking For
             </h3>
             <ul className="space-y-3 text-text-secondary">
               <li className="flex items-start">

@@ -7,13 +7,6 @@ export const metadata = {
 }
 
 export default function AboutPage() {
-  const stats = [
-    { label: 'Episodes Published', value: '50+' },
-    { label: 'Countries Reached', value: '45+' },
-    { label: 'Industries Represented', value: '15+' },
-    { label: 'Total Downloads', value: '100K+' },
-  ]
-
   const values = [
     {
       icon: Target,
@@ -52,29 +45,13 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Stats Section */}
-      <section className="bg-neutral-50 py-16 mb-20">
-        <div className="container-custom">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            {stats.map((stat) => (
-              <div key={stat.label} className="text-center">
-                <div className="text-4xl md:text-5xl font-bold text-accent mb-2">
-                  {stat.value}
-                </div>
-                <div className="text-text-secondary">{stat.label}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* Mission Section */}
       <section className="container-custom mb-20">
         <div className="max-w-4xl mx-auto">
           <h2 className="text-primary mb-8 text-center">Our Mission</h2>
           <div className="card bg-gradient-to-br from-primary to-accent text-white p-12">
             <p className="text-2xl leading-relaxed text-center">
-              To create a space where tech practitioners can share authentic insights, learn from each other's experiences, and elevate the entire industry through knowledge sharing.
+              To create a space where tech practitioners can share authentic insights, learn from each other&apos;s experiences, and elevate the entire industry through knowledge sharing.
             </p>
           </div>
         </div>
@@ -146,7 +123,7 @@ export default function AboutPage() {
 
               <div className="md:col-span-2">
                 <p className="text-text-secondary leading-relaxed mb-4">
-                  [Host Name] is a [title/role] with [X] years of experience in the tech industry. They've [brief career highlights].
+                  [Host Name] is a [title/role] with [X] years of experience in the tech industry. They&apos;ve [brief career highlights].
                 </p>
                 <p className="text-text-secondary leading-relaxed mb-4">
                   The idea for The Practitioners Pod came from [origin story - why they started the podcast, what problem they saw, what they wanted to create].
@@ -198,7 +175,7 @@ export default function AboutPage() {
               We believe the best insights come from authentic, in-depth conversations. Our episodes typically run 45-60 minutes, giving guests the space to really dive deep into their experiences and insights.
             </p>
             <p className="text-lg">
-              We don't do surface-level interviews. We ask the hard questions, explore the challenges and failures, and dig into the decision-making processes that led to success.
+              We don&apos;t do surface-level interviews. We ask the hard questions, explore the challenges and failures, and dig into the decision-making processes that led to success.
             </p>
             <p className="text-lg">
               Our guests appreciate the opportunity to share their complete story - the good, the bad, and the lessons learned along the way.
@@ -212,7 +189,7 @@ export default function AboutPage() {
         <div className="card bg-primary text-white text-center">
           <h2 className="mb-6">Want to Be Part of the Show?</h2>
           <p className="text-xl text-neutral-200 mb-8 max-w-2xl mx-auto">
-            We're always looking for experienced practitioners with unique insights to share.
+            We&apos;re always looking for experienced practitioners with unique insights to share.
           </p>
           <Link href="/apply" className="btn-primary bg-white text-primary hover:bg-neutral-100">
             Apply to Be a Guest

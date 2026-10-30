@@ -83,7 +83,7 @@ export default function GuestApplicationForm() {
           Application Submitted!
         </h3>
         <p className="text-text-secondary max-w-md mx-auto mb-6">
-          Thank you for your application. We'll review it carefully and get back to you within 5-7 business days.
+          Thank you for your application. We&apos;ll review it carefully and get back to you within 5-7 business days.
         </p>
         <button
           onClick={() => setSubmitted(false)}
@@ -300,7 +300,7 @@ export default function GuestApplicationForm() {
 
           <div>
             <label className="label-field">
-              Topics You'd Like to Discuss <span className="text-red-500">*</span>
+              Topics You&apos;d Like to Discuss <span className="text-red-500">*</span>
             </label>
             <input
               type="text"

@@ -71,7 +71,7 @@ export default function TermsPage() {
                 Disclaimer
               </h2>
               <p>
-                The website is provided "as is" without warranties of any kind. We do not guarantee 
+                The website is provided &quot;as is&quot; without warranties of any kind. We do not guarantee 
                 the accuracy, completeness, or reliability of any content on the website.
               </p>
             </section>

@@ -1,3 +1,5 @@
+> **Historical.** This note describes an earlier switch from NextAuth to Supabase Auth inside the Next.js prototype. It is not the Phase 0 plan. Current setup is the root [README](./README.md). Decisions are in [PROGRESS.md](./PROGRESS.md).
+
 # ✅ Migration to Supabase Auth - Complete!
 
 Your website has been successfully converted from NextAuth.js to Supabase Auth. Here's what changed and what you need to do.

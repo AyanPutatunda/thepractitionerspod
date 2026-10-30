@@ -4,9 +4,16 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "predev": "prisma generate",
     "build": "next build",
+    "prebuild": "prisma generate",
     "start": "next start",
     "lint": "next lint",
+    "typecheck": "tsc --noEmit",
+    "pretypecheck": "prisma generate",
+    "test": "vitest run",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
     "db:push": "prisma db push",
     "db:studio": "prisma studio",
     "db:generate": "prisma generate"
@@ -17,7 +24,6 @@
     "react-dom": "^18.3.0",
     "@prisma/client": "^5.18.0",
     "@supabase/supabase-js": "^2.39.0",
-    "@supabase/auth-helpers-nextjs": "^0.8.7",
     "@supabase/ssr": "^0.0.10",
     "zod": "^3.23.8",
     "framer-motion": "^11.3.0",
@@ -39,7 +45,10 @@
     "autoprefixer": "^10.4.0",
     "prisma": "^5.18.0",
     "eslint": "^8.57.0",
-    "eslint-config-next": "^14.2.0"
+    "eslint-config-next": "^14.2.0",
+    "eslint-config-prettier": "^9.1.0",
+    "prettier": "^3.4.2",
+    "vitest": "^3.2.4"
   }
 }
 

@@ -61,13 +61,6 @@ jobs:
         with:
           node-version: 22
 
-      - name: Check Netlify secrets
-        run: |
-          if [ -z "$NETLIFY_AUTH_TOKEN" ] || [ -z "$NETLIFY_SITE_ID" ]; then
-            echo "::error::Add NETLIFY_AUTH_TOKEN and NETLIFY_SITE_ID in Settings → Secrets and variables → Actions."
-            exit 1
-          fi
-
       - name: Deploy to Netlify
         id: deploy
         env:
@@ -75,6 +68,10 @@ jobs:
           DEPLOY_MSG: ${{ github.event.head_commit.message || github.event.pull_request.title || 'manual deploy' }}
           ALIAS: pr-${{ github.event.pull_request.number || github.run_number }}
         run: |
+          if [ -z "$NETLIFY_AUTH_TOKEN" ] || [ -z "$NETLIFY_SITE_ID" ]; then
+            echo "::notice::NETLIFY_AUTH_TOKEN or NETLIFY_SITE_ID is unset. Skipping the legacy Astro deploy. The CI workflow is the Next.js check."
+            exit 0
+          fi
           if [ "${{ github.ref }}" = "refs/heads/main" ]; then
             FLAGS="--prod"
           else

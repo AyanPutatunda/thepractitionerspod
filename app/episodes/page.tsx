@@ -1,6 +1,5 @@
 import { Suspense } from 'react'
 import EpisodesGrid from '@/components/EpisodesGrid'
-import { Search } from 'lucide-react'
 import { prisma } from '@/lib/prisma'
 
 export const metadata = {

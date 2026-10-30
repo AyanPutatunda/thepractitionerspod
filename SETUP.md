@@ -1,3 +1,5 @@
+> **Historical.** Phase 0 moved setup to the root [README](./README.md) and the schema to `supabase/migrations`. This guide still describes `prisma db push`. Do not follow it for new work. See [PROGRESS.md](./PROGRESS.md).
+
 # Quick Setup Guide
 
 ## 1. Install Dependencies

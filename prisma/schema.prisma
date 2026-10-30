@@ -1,3 +1,7 @@
+// Legacy prototype schema used by the Next.js pages and API routes.
+// Do not `prisma db push` this onto a database that has applied supabase/migrations.
+// The source of truth for new work is supabase/migrations. See PROGRESS.md.
+
 generator client {
   provider = "prisma-client-js"
 }
