@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { contactSchema, guestApplicationSchema } from './forms'
+import { contactSchema, guestApplicationSchema, issueFor } from './forms'
 
 const application = {
   name: 'Ada Lovelace',
@@ -26,6 +26,13 @@ describe('guest application', () => {
     expect(guestApplicationSchema.safeParse({ ...application, story: 'too short' }).success).toBe(
       false
     )
+  })
+})
+
+describe('inline field checks', () => {
+  it('reports one field and clears it when the value is valid', () => {
+    expect(issueFor(contactSchema, 'email', 'not-an-email')).toMatch(/email/i)
+    expect(issueFor(contactSchema, 'email', 'ada@example.com')).toBeNull()
   })
 })
 

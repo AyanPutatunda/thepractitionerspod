@@ -1,5 +1,4 @@
 import type { Metadata } from 'next'
-import { PencilMark } from '@/components/PencilMark'
 import { site } from '@/lib/site'
 
 export const metadata: Metadata = {
@@ -14,7 +13,6 @@ export default function TermsPage() {
       <header className="page-intro">
         <div className="title-block">
           <h1 className="display">Terms</h1>
-          <PencilMark />
         </div>
         <p className="lede">
           {site.name} is a website for a YouTube show hosted by{' '}

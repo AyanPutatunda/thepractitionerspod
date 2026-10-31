@@ -52,6 +52,14 @@ export const contactSchema = z.object({
 export type GuestApplication = z.infer<typeof guestApplicationSchema>
 export type ContactMessage = z.infer<typeof contactSchema>
 
+export function issueFor(schema: z.AnyZodObject, key: string, value: unknown): string | null {
+  const field = schema.shape[key] as z.ZodTypeAny | undefined
+  if (!field) return null
+  const parsed = field.safeParse(value)
+  if (parsed.success) return null
+  return parsed.error.issues[0]?.message ?? null
+}
+
 export function formErrors(error: z.ZodError): Record<string, string> {
   const fields: Record<string, string> = {}
   for (const issue of error.issues) {

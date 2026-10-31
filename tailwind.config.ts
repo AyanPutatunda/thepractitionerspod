@@ -17,8 +17,15 @@ const config: Config = {
         },
       },
       fontFamily: {
-        sans: ['var(--font-instrument)', 'Avenir Next', 'Segoe UI', 'sans-serif'],
-        serif: ['var(--font-newsreader)', 'Georgia', 'serif'],
+        sans: [
+          '-apple-system',
+          'BlinkMacSystemFont',
+          'SF Pro Display',
+          'SF Pro Text',
+          'var(--font-inter)',
+          'Segoe UI',
+          'sans-serif',
+        ],
       },
       spacing: {
         s1: 'var(--space-1)',

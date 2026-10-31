@@ -1,7 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { ContactForm } from '@/components/ContactForm'
-import { PencilMark } from '@/components/PencilMark'
 import { site } from '@/lib/site'
 
 export const metadata: Metadata = {
@@ -16,7 +15,6 @@ export default function ContactPage() {
       <header className="page-intro">
         <div className="title-block">
           <h1 className="display">Write to the show</h1>
-          <PencilMark />
         </div>
         <p className="dek">
           <a href={`mailto:${site.email}`}>{site.email}</a>

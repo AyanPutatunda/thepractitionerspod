@@ -13,14 +13,28 @@ export default function OpenGraphImage() {
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-between',
-        background: '#f7f4ee',
-        color: '#1f1b16',
+        background: '#f3f5f7',
+        color: '#1c1c1e',
         padding: '72px',
       }}
     >
-      <div style={{ display: 'flex', fontSize: 28 }}>The Practitioners Pod</div>
-      <div style={{ display: 'flex', fontSize: 64, lineHeight: 1.08, maxWidth: 860 }}>
-        Real implementation stories from the people who ship
+      <div style={{ display: 'flex', fontSize: 28, fontWeight: 600 }}>The Practitioners Pod</div>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+        <div
+          style={{
+            display: 'flex',
+            fontSize: 64,
+            lineHeight: 1.05,
+            letterSpacing: -1,
+            maxWidth: 860,
+            fontWeight: 600,
+          }}
+        >
+          Real implementation stories from the people who ship
+        </div>
+        <div
+          style={{ display: 'flex', width: 32, height: 2, background: '#006786', borderRadius: 2 }}
+        />
       </div>
       <div style={{ display: 'flex', fontSize: 24, color: '#006786' }}>thepractitionerspod.com</div>
     </div>,
