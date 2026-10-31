@@ -1,295 +1,211 @@
 import Link from 'next/link'
-import { Play, ArrowRight, Users, Mic2, TrendingUp } from 'lucide-react'
-import EpisodeCard from '@/components/EpisodeCard'
-import NewsletterSignup from '@/components/NewsletterSignup'
-import { prisma } from '@/lib/prisma'
+import { ArrowRight, YoutubeLogo } from '@phosphor-icons/react/dist/ssr'
+import { Misregister } from '@/components/Misregister'
+import { getEpisodes } from '@/lib/episodes'
+import { site } from '@/lib/site'
+import { excerpt, formatDate } from '@/lib/text'
 
-async function getLatestEpisodes() {
-  try {
-    const episodes = await prisma.episode.findMany({
-      take: 6,
-      orderBy: { publishedAt: 'desc' },
-      include: { guest: true },
-    })
-    return episodes
-  } catch (error) {
-    console.error('Error fetching episodes:', error)
-    return []
-  }
-}
-
-async function getFeaturedGuests() {
-  try {
-    const guests = await prisma.guest.findMany({
-      take: 6,
-      include: { episodes: true },
-      where: {
-        episodes: {
-          some: {},
-        },
-      },
-    })
-    return guests
-  } catch (error) {
-    console.error('Error fetching guests:', error)
-    return []
-  }
-}
-
-async function getStats() {
-  try {
-    const [episodeCount, guestCount, totalViews] = await Promise.all([
-      prisma.episode.count(),
-      prisma.guest.count(),
-      prisma.episode.aggregate({
-        _sum: { viewCount: true },
-      }),
-    ])
-
-    return {
-      episodes: episodeCount,
-      guests: guestCount,
-      views: totalViews._sum.viewCount || 0,
-    }
-  } catch (error) {
-    return { episodes: 0, guests: 0, views: 0 }
-  }
-}
+const pillars = [
+  {
+    n: '1',
+    title: 'The work',
+    body: 'What shipped, what broke, and what the team changed. Not a tour of a finished slide.',
+  },
+  {
+    n: '2',
+    title: 'The people who did it',
+    body: 'Senior data engineers, AI practitioners, and the leads who run the system in production.',
+  },
+  {
+    n: '3',
+    title: 'On YouTube',
+    body: 'Episodes are published on the show’s YouTube channel. There is no separate audio feed.',
+  },
+]
 
 export default async function HomePage() {
-  const [latestEpisodes, featuredGuests, stats] = await Promise.all([
-    getLatestEpisodes(),
-    getFeaturedGuests(),
-    getStats(),
-  ])
+  const episodes = await getEpisodes()
+  const latest = episodes[0]
+  const recent = episodes.slice(0, 6)
 
   return (
     <>
-      {/* Hero Section */}
-      <section className="relative pt-32 pb-20 md:pt-40 md:pb-32 bg-gradient-to-br from-primary via-primary to-accent">
-        <div className="container-custom">
-          <div className="max-w-4xl">
-            <h1 className="text-white mb-6 text-balance">
-              Conversations with Tech Practitioners Who Build the Future
-            </h1>
-            <p className="text-xl md:text-2xl text-neutral-200 mb-10 leading-relaxed max-w-2xl">
-              In-depth interviews with industry leaders, exploring the real challenges and innovations shaping technology today.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4">
-              <Link href="/episodes" className="btn-primary group">
-                Listen to Latest Episode
-                <Play className="w-5 h-5 ml-2 group-hover:scale-110 transition-transform" />
-              </Link>
-              <Link href="/apply" className="btn-secondary bg-white/10 border-white text-white hover:bg-white/20">
-                Be a Guest
-                <ArrowRight className="w-5 h-5 ml-2" />
-              </Link>
-            </div>
-          </div>
-        </div>
-
-        {/* Decorative gradient overlay */}
-        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-white to-transparent"></div>
-      </section>
-
-      {/* Counts render only once there is something real to show. */}
-      {(stats.episodes > 0 || stats.guests > 0 || stats.views > 0) && (
-        <section className="py-12 bg-neutral-50">
-          <div className="container-custom">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              <div className="text-center">
-                <div className="text-4xl md:text-5xl font-bold text-primary mb-2">
-                  {stats.episodes}+
-                </div>
-                <div className="text-text-secondary">Episodes Published</div>
-              </div>
-              <div className="text-center">
-                <div className="text-4xl md:text-5xl font-bold text-primary mb-2">
-                  {stats.guests}+
-                </div>
-                <div className="text-text-secondary">Industry Leaders</div>
-              </div>
-              <div className="text-center">
-                <div className="text-4xl md:text-5xl font-bold text-primary mb-2">
-                  {stats.views >= 1000
-                  ? `${Math.floor(stats.views / 1000)}K+`
-                  : stats.views.toLocaleString()}
-                </div>
-                <div className="text-text-secondary">Total Views</div>
-              </div>
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* Latest Episodes Section */}
-      <section className="section-spacing">
-        <div className="container-custom">
-          <div className="flex items-center justify-between mb-12">
-            <div>
-              <h2 className="text-primary mb-4">Latest Episodes</h2>
-              <p className="text-text-secondary max-w-2xl">
-                Explore our recent conversations with tech leaders and practitioners.
-              </p>
-            </div>
-            <Link
-              href="/episodes"
-              className="hidden md:inline-flex items-center text-accent hover:text-accent/80 font-medium"
-            >
-              View All Episodes
-              <ArrowRight className="w-5 h-5 ml-2" />
-            </Link>
-          </div>
-
-          {latestEpisodes.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {latestEpisodes.map((episode) => (
-                <EpisodeCard key={episode.id} episode={episode} />
-              ))}
-            </div>
-          ) : (
-            <div className="text-center py-16">
-              <Mic2 className="w-16 h-16 text-neutral-300 mx-auto mb-4" />
-              <p className="text-text-secondary">
-                Episodes coming soon. Stay tuned!
-              </p>
-            </div>
-          )}
-
-          <div className="mt-12 text-center md:hidden">
-            <Link href="/episodes" className="btn-primary">
-              View All Episodes
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* About Section */}
-      <section className="section-spacing bg-neutral-50">
-        <div className="container-custom">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-            <div>
-              <h2 className="text-primary mb-6">About The Podcast</h2>
-              <p className="text-text-secondary mb-6">
-                The Practitioners Pod brings you authentic conversations with the people building the future of technology. We go beyond the surface to explore real challenges, decision-making processes, and lessons learned from years in the trenches.
-              </p>
-              <p className="text-text-secondary mb-8">
-                Our guests are senior practitioners, technical leaders, and founders who have deep hands-on experience. Each episode is a masterclass in practical wisdom.
-              </p>
-              <Link href="/about" className="btn-secondary">
-                Learn More About Us
-              </Link>
-            </div>
-
-            <div className="grid grid-cols-2 gap-6">
-              <div className="card">
-                <Users className="w-10 h-10 text-accent mb-4" />
-                <h4 className="text-primary mb-2">Expert Guests</h4>
-                <p className="text-sm text-text-secondary">
-                  Senior practitioners and technical leaders from top companies
-                </p>
-              </div>
-              <div className="card">
-                <Mic2 className="w-10 h-10 text-accent mb-4" />
-                <h4 className="text-primary mb-2">Deep Dives</h4>
-                <p className="text-sm text-text-secondary">
-                  Long-form conversations exploring complex technical topics
-                </p>
-              </div>
-              <div className="card">
-                <TrendingUp className="w-10 h-10 text-accent mb-4" />
-                <h4 className="text-primary mb-2">Real Insights</h4>
-                <p className="text-sm text-text-secondary">
-                  Practical wisdom from years of hands-on experience
-                </p>
-              </div>
-              <div className="card">
-                <Play className="w-10 h-10 text-accent mb-4" />
-                <h4 className="text-primary mb-2">Video Format</h4>
-                <p className="text-sm text-text-secondary">
-                  All episodes available as video on YouTube
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Featured Guests Section */}
-      {featuredGuests.length > 0 && (
-        <section className="section-spacing">
-          <div className="container-custom">
-            <div className="text-center mb-12">
-              <h2 className="text-primary mb-4">Featured Guests</h2>
-              <p className="text-text-secondary max-w-2xl mx-auto">
-                Tech leaders and practitioners who have shared their insights on the show.
-              </p>
-            </div>
-
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
-              {featuredGuests.map((guest) => (
-                <Link
-                  key={guest.id}
-                  href={`/guests#${guest.id}`}
-                  className="card text-center group hover:border-accent"
-                >
-                  <div className="w-20 h-20 mx-auto mb-3 rounded-full bg-neutral-200 overflow-hidden">
-                    {guest.headshotUrl && (
-                      <img
-                        src={guest.headshotUrl}
-                        alt={guest.name}
-                        className="w-full h-full object-cover"
-                      />
-                    )}
-                  </div>
-                  <h4 className="text-sm font-semibold text-primary group-hover:text-accent transition-colors">
-                    {guest.name}
-                  </h4>
-                  <p className="text-xs text-text-secondary mt-1">
-                    {guest.company}
-                  </p>
+      <section className="hero" aria-labelledby="hero-title">
+        <div className="stack">
+          {latest ? (
+            <>
+              <span className="kicker">
+                Latest episode · № {latest.number} · {formatDate(latest.publishedAt)}
+              </span>
+              <h1 id="hero-title" className="display">
+                <Link className="title-link" href={`/episodes/${latest.slug}`}>
+                  <Misregister text={latest.title} />
                 </Link>
-              ))}
-            </div>
-
-            <div className="mt-12 text-center">
-              <Link href="/guests" className="btn-secondary">
-                View All Guests
-              </Link>
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* Newsletter Section */}
-      <section className="section-spacing bg-primary text-white">
-        <div className="container-custom">
-          <div className="max-w-3xl mx-auto text-center">
-            <h2 className="mb-4">Stay Updated</h2>
-            <p className="text-xl text-neutral-200 mb-10">
-              Get notified when new episodes drop and receive exclusive behind-the-scenes content.
-            </p>
-            <NewsletterSignup />
-          </div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="section-spacing bg-neutral-50">
-        <div className="container-custom">
-          <div className="max-w-3xl mx-auto text-center">
-            <h2 className="text-primary mb-6">Want to Share Your Story?</h2>
-            <p className="text-xl text-text-secondary mb-10">
-              We&apos;re always looking for experienced practitioners with unique insights to share. Apply to be a guest on the show.
-            </p>
-            <Link href="/apply" className="btn-primary text-lg px-10 py-4">
-              Apply to Be a Guest
-              <ArrowRight className="w-5 h-5 ml-2" />
+              </h1>
+              {excerpt(latest.description) ? (
+                <p className="dek">{excerpt(latest.description)}</p>
+              ) : null}
+            </>
+          ) : (
+            <>
+              <span className="kicker">First episodes coming soon</span>
+              <h1 id="hero-title" className="display">
+                <Misregister text="Real implementation stories from the people who ship" />
+              </h1>
+              <p className="dek">
+                Interviews with senior practitioners about what actually happened when they shipped
+                the work. Published on YouTube.
+              </p>
+            </>
+          )}
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10 }}>
+            <a
+              className="btn btn-primary"
+              href={site.youtubeUrl}
+              style={{ minHeight: 44, paddingInline: 16, fontSize: 15 }}
+            >
+              <YoutubeLogo size={20} weight="duotone" aria-hidden />
+              Subscribe on YouTube
+            </a>
+            <Link
+              className="btn btn-secondary"
+              href="/guest-application"
+              style={{ minHeight: 44, paddingInline: 16, fontSize: 15 }}
+            >
+              Be a guest
             </Link>
           </div>
         </div>
+        {latest ? (
+          <figure>
+            <Link href={`/episodes/${latest.slug}`} className="title-link">
+              <div className="halftone" style={{ aspectRatio: '16 / 9' }}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={latest.thumbnailUrl}
+                  alt=""
+                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                />
+              </div>
+            </Link>
+            <figcaption className="video-note">{latest.title}</figcaption>
+          </figure>
+        ) : null}
+      </section>
+
+      <section aria-label="About the show" style={{ padding: '8px 0 72px' }}>
+        <hr className="rule-double" />
+        <p className="dateline">
+          <span>
+            Hosted by <a href={site.hostUrl}>{site.hostName}</a>
+          </span>
+          <span>Data and AI in production</span>
+          <span>Implementation, not theory</span>
+          <span>No vendor pitches</span>
+        </p>
+        <hr className="rule-single" />
+      </section>
+
+      <section aria-labelledby="what-h" style={{ padding: '24px 0 96px' }}>
+        <h2 id="what-h" className="section-title" style={{ marginBottom: 44 }}>
+          What the show is
+        </h2>
+        <ol className="columns-3">
+          {pillars.map((item) => (
+            <li key={item.n} style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+              <span className="step-num" aria-hidden="true">
+                {item.n}
+              </span>
+              <h3 style={{ fontSize: 22, lineHeight: '28px', margin: 0 }}>{item.title}</h3>
+              <p className="lede" style={{ fontSize: 16, lineHeight: '26px' }}>
+                {item.body}
+              </p>
+            </li>
+          ))}
+        </ol>
+      </section>
+
+      <section aria-labelledby="who-h" style={{ padding: '0 0 96px', maxWidth: '62ch' }}>
+        <h2 id="who-h" className="section-title" style={{ marginBottom: 16 }}>
+          Who it’s for
+        </h2>
+        <p className="lede">
+          People who build data platforms or put models into production. If you want a product
+          pitch, this is the wrong show.
+        </p>
+      </section>
+
+      <section aria-labelledby="recent-h" style={{ padding: '24px 0 96px' }}>
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'baseline',
+            justifyContent: 'space-between',
+            gap: 16,
+            flexWrap: 'wrap',
+            marginBottom: 44,
+          }}
+        >
+          <h2 id="recent-h" className="section-title">
+            Recent episodes
+          </h2>
+          <Link
+            href="/episodes"
+            style={{ fontSize: 15, display: 'inline-flex', alignItems: 'center', gap: 6 }}
+          >
+            The full archive <ArrowRight size={16} weight="duotone" aria-hidden />
+          </Link>
+        </div>
+        {recent.length > 0 ? (
+          <ol className="episode-grid">
+            {recent.map((episode) => (
+              <li key={episode.slug}>
+                <Link className="episode-link" href={`/episodes/${episode.slug}`}>
+                  <span className="numeral" aria-hidden="true">
+                    {episode.number}
+                  </span>
+                  <span className="episode-title">
+                    <span className="sr-only">Episode {episode.number}: </span>
+                    {episode.title}
+                  </span>
+                  <span
+                    className="quiet"
+                    style={{ fontSize: 13, fontVariantNumeric: 'tabular-nums' }}
+                  >
+                    {formatDate(episode.publishedAt)}
+                    {episode.durationMinutes ? ` · ${episode.durationMinutes} min` : ''}
+                  </span>
+                </Link>
+              </li>
+            ))}
+          </ol>
+        ) : (
+          <p className="lede">
+            First episodes coming soon. They will show up here when they are public on{' '}
+            <a href={site.youtubeUrl}>YouTube</a>.
+          </p>
+        )}
+      </section>
+
+      <section aria-labelledby="guest-cta" className="split" style={{ padding: '24px 0 112px' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+          <span className="kicker">Be a guest</span>
+          <h2 id="guest-cta" className="section-title">
+            Share an implementation story
+          </h2>
+          <p className="lede" style={{ maxWidth: '46ch' }}>
+            If you have shipped the work and can talk about what actually happened, apply. The
+            conversation is remote and the episode is published on YouTube.
+          </p>
+        </div>
+        <Link
+          className="btn btn-primary"
+          href="/guest-application"
+          style={{ minHeight: 44, width: 'fit-content', paddingInline: 20, fontSize: 15 }}
+        >
+          Apply to be a guest
+        </Link>
       </section>
     </>
   )
 }
-

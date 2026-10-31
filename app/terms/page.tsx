@@ -1,120 +1,46 @@
-export const metadata = {
-  title: 'Terms of Service | The Practitioners Pod',
-  description: 'Terms and conditions for using The Practitioners Pod website.',
+import type { Metadata } from 'next'
+import { site } from '@/lib/site'
+
+export const metadata: Metadata = {
+  title: 'Terms',
+  description: 'Terms for using the The Practitioners Pod website.',
+  alternates: { canonical: '/terms' },
 }
 
 export default function TermsPage() {
   return (
-    <div className="pt-32 pb-20">
-      <div className="container-custom">
-        <div className="max-w-4xl mx-auto">
-          <h1 className="text-primary mb-8">Terms of Service</h1>
-          
-          <div className="prose prose-lg max-w-none space-y-8 text-text-secondary">
-            <section>
-              <h2 className="text-2xl font-semibold text-primary mb-4">
-                Acceptance of Terms
-              </h2>
-              <p>
-                By accessing and using The Practitioners Pod website, you accept and agree to be bound 
-                by these Terms of Service. If you do not agree to these terms, please do not use our website.
-              </p>
-            </section>
-
-            <section>
-              <h2 className="text-2xl font-semibold text-primary mb-4">
-                Use of Website
-              </h2>
-              <p>You agree to use our website only for lawful purposes and in accordance with these Terms. You agree not to:</p>
-              <ul className="list-disc pl-6 space-y-2">
-                <li>Violate any applicable laws or regulations</li>
-                <li>Infringe upon the rights of others</li>
-                <li>Transmit harmful or malicious code</li>
-                <li>Attempt to gain unauthorized access to our systems</li>
-                <li>Use automated systems to scrape or collect data</li>
-              </ul>
-            </section>
-
-            <section>
-              <h2 className="text-2xl font-semibold text-primary mb-4">
-                Intellectual Property
-              </h2>
-              <p>
-                All content on this website, including text, graphics, logos, videos, and software, 
-                is the property of The Practitioners Pod or its content suppliers and is protected by 
-                copyright and intellectual property laws.
-              </p>
-            </section>
-
-            <section>
-              <h2 className="text-2xl font-semibold text-primary mb-4">
-                Guest Applications
-              </h2>
-              <p>
-                Submitting a guest application does not guarantee you will be featured on the podcast. 
-                We reserve the right to accept or decline any application at our discretion.
-              </p>
-            </section>
-
-            <section>
-              <h2 className="text-2xl font-semibold text-primary mb-4">
-                Content Usage
-              </h2>
-              <p>
-                Podcast episodes and content are available for personal, non-commercial use. 
-                You may not reproduce, distribute, or create derivative works without explicit permission.
-              </p>
-            </section>
-
-            <section>
-              <h2 className="text-2xl font-semibold text-primary mb-4">
-                Disclaimer
-              </h2>
-              <p>
-                The website is provided &quot;as is&quot; without warranties of any kind. We do not guarantee 
-                the accuracy, completeness, or reliability of any content on the website.
-              </p>
-            </section>
-
-            <section>
-              <h2 className="text-2xl font-semibold text-primary mb-4">
-                Limitation of Liability
-              </h2>
-              <p>
-                The Practitioners Pod shall not be liable for any indirect, incidental, special, 
-                consequential, or punitive damages arising out of your use of the website.
-              </p>
-            </section>
-
-            <section>
-              <h2 className="text-2xl font-semibold text-primary mb-4">
-                Changes to Terms
-              </h2>
-              <p>
-                We reserve the right to modify these terms at any time. Changes will be effective 
-                immediately upon posting to the website.
-              </p>
-            </section>
-
-            <section>
-              <h2 className="text-2xl font-semibold text-primary mb-4">
-                Contact Information
-              </h2>
-              <p>
-                For questions about these Terms of Service, please contact us at:{' '}
-                <a href="mailto:legal@thepractitionerspod.com" className="text-accent hover:text-accent/80">
-                  legal@thepractitionerspod.com
-                </a>
-              </p>
-            </section>
-
-            <p className="text-sm text-text-secondary">
-              Last updated: {new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
+    <article
+      style={{
+        padding: 'clamp(48px, 7vw, 96px) 0 112px',
+        maxWidth: '68ch',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 18,
+      }}
+    >
+      <span className="kicker">Terms</span>
+      <h1 className="display">Terms</h1>
+      <p className="lede">
+        {site.name} is a website for a YouTube show hosted by{' '}
+        <a href={site.hostUrl}>{site.hostName}</a>. Episode video plays from YouTube and is covered
+        by YouTube’s terms as well as these.
+      </p>
+      <h2 style={{ fontSize: 26, marginTop: 12 }}>Using the site</h2>
+      <p className="lede">
+        You may read the pages and apply to be a guest or send a message. Don’t submit someone
+        else’s personal information without a reason they would expect, and don’t use the forms to
+        send spam or malware.
+      </p>
+      <h2 style={{ fontSize: 26 }}>No warranty</h2>
+      <p className="lede">
+        The site is provided as-is. Conversations describe one practitioner’s experience. They are
+        not professional advice. Episode pages appear when a video is public on the{' '}
+        <a href={site.youtubeUrl}>YouTube channel</a>.
+      </p>
+      <h2 style={{ fontSize: 26 }}>Contact</h2>
+      <p className="lede">
+        Questions about these terms: <a href={`mailto:${site.email}`}>{site.email}</a>.
+      </p>
+    </article>
   )
 }
-

@@ -1,45 +1,44 @@
-import { Suspense } from 'react'
-import EpisodesGrid from '@/components/EpisodesGrid'
-import { prisma } from '@/lib/prisma'
+import type { Metadata } from 'next'
+import { EpisodeArchive } from '@/components/EpisodeArchive'
+import { getEpisodes } from '@/lib/episodes'
+import { site } from '@/lib/site'
 
-export const metadata = {
-  title: 'Episodes | The Practitioners Pod',
-  description: 'Browse all podcast episodes featuring conversations with tech industry leaders and practitioners.',
-}
-
-async function getAllEpisodes() {
-  try {
-    const episodes = await prisma.episode.findMany({
-      orderBy: { publishedAt: 'desc' },
-      include: { guest: true },
-    })
-    return episodes
-  } catch (error) {
-    console.error('Error fetching episodes:', error)
-    return []
-  }
+export const metadata: Metadata = {
+  title: 'Episodes',
+  description: 'Every episode of The Practitioners Pod. Newest first.',
+  alternates: { canonical: '/episodes' },
 }
 
 export default async function EpisodesPage() {
-  const episodes = await getAllEpisodes()
+  const episodes = await getEpisodes()
 
   return (
-    <div className="pt-32 pb-20">
-      <div className="container-custom">
-        {/* Header */}
-        <div className="mb-12">
-          <h1 className="text-primary mb-4">All Episodes</h1>
-          <p className="text-xl text-text-secondary max-w-3xl">
-            Explore our complete collection of conversations with tech practitioners and industry leaders.
-          </p>
-        </div>
-
-        {/* Episodes Grid with Filters */}
-        <Suspense fallback={<div className="text-center py-12">Loading episodes...</div>}>
-          <EpisodesGrid initialEpisodes={episodes} />
-        </Suspense>
-      </div>
-    </div>
+    <>
+      <section
+        style={{
+          padding: 'clamp(48px, 7vw, 96px) 0 40px',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 24,
+        }}
+      >
+        <span className="kicker">
+          The archive
+          {episodes.length > 0
+            ? ` · ${episodes.length} ${episodes.length === 1 ? 'episode' : 'episodes'}`
+            : ''}
+        </span>
+        <h1 className="display">Every episode</h1>
+        <p className="dek">Conversations with people who have shipped the work. Newest first.</p>
+      </section>
+      {episodes.length > 0 ? (
+        <EpisodeArchive episodes={episodes} />
+      ) : (
+        <p className="lede" style={{ paddingBottom: 112 }}>
+          First episodes coming soon. They will be listed here when they are public on{' '}
+          <a href={site.youtubeUrl}>YouTube</a>.
+        </p>
+      )}
+    </>
   )
 }
-

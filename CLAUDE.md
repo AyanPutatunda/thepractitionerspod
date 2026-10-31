@@ -51,16 +51,16 @@ You work for Ayan, a Staff Data Engineer (14+ years; Snowflake, dbt, Airflow, Cl
 **Reference points:** Stripe, Linear, Notion — clean, confident, editorial, lots of air.
 
 - **Tone:** authoritative, credible, sophisticated; not sterile or overly corporate.
-- **Palette:** 2–3 colors maximum.
-  - Primary: deep navy `#1a2332` or charcoal `#2d3748`
-  - One restrained accent (e.g. blue `#3b82f6` or teal `#06b6d4`) — used sparingly for links, focus, key CTAs
-  - Neutrals: `#ffffff`, `#f7fafc`, `#e2e8f0`; body text `#1a202c`
-  - Propose the final palette as design tokens and get Ayan's sign-off before building pages.
-- **Typography:** premium sans-serif (Inter, Manrope, or similar; optionally a refined serif for display headings). Clear H1–H6 hierarchy, comfortable line length (~65–75ch).
+- **Palette:** 3 brand colors, signed off from the Broadsheet design export (2026-10-31).
+  - Ink `#201e1d`
+  - Cyan `#0088b0` (primary accent; paragraph-size accent text uses the 700 step `#006786`)
+  - Magenta `#d6006c`, used only as the second plate on the misregistered headline
+  - Neutral ramps live in CSS variables. No process yellow. No navy/gold/teal from the prototype.
+- **Typography:** Source Serif 4 via `next/font` for headings and body. Heading weight 600. The wordmark sets “Pod” in true italic at weight 400.
 - **Layout:** generous white space, 12-column grid, max content width 1440px, mobile-first.
 - **Motion:** subtle only (fade/slide on scroll, hover states). Respect `prefers-reduced-motion`.
 - **Imagery:** real guest headshots and episode thumbnails from YouTube; avoid stock photos.
-- **Dark mode:** support it via tokens; light is the default.
+- **Dark mode:** Broadsheet is light only (paper ground, no dark surfaces). Tokens still live in one `:root` block so a later theme can be added without hunting through components.
 - **Accessibility:** WCAG 2.1 AA — contrast, keyboard navigation, focus rings, alt text, semantic HTML.
 
 Before building pages, load the `frontend-design` guidance if available and produce a small design-system page (`/styleguide`, dev-only) showing tokens, type scale, buttons, cards, and forms.
@@ -79,8 +79,8 @@ Before building pages, load the `frontend-design` guidance if available and prod
 | Email | **Resend** (or SMTP via Gmail as fallback) | Transactional + templated outreach |
 | Scheduling | Google Calendar API (two-way) or Cal.com embed | Timezone-aware booking, iCal for guests |
 | Bot protection | Cloudflare Turnstile (or reCAPTCHA) | All public forms |
-| Analytics | GA4 (+ Vercel Analytics) | Track guest-application conversions |
-| Hosting | **Vercel** | Preview deploys per branch |
+| Analytics | GA4 | Track guest-application conversions. Not wired in v1. |
+| Hosting | **Netlify** | Existing site `thepractitionerspod`. Git auto-publish is the only deployer. `netlify.toml` at the repo root. |
 | Testing | Vitest (unit), Playwright (e2e), Lighthouse CI | |
 
 If Ayan prefers a different choice on any row, follow him and update this file.
@@ -140,7 +140,7 @@ Guest management & scheduling system:
 
 ## 6. YouTube integration
 
-- Sync job (Vercel Cron or on-demand admin button) pulls channel uploads via YouTube Data API v3: video ID, title, description, publish date, duration, thumbnails, view count.
+- Sync runs at build and ISR (about hourly) from YouTube’s public channel feed, or the Data API when `YOUTUBE_API_KEY` is set. Fields: video ID, title, description, publish date, thumbnails, and duration plus view count when the API key is present.
 - Store in `episodes` table; enrichment (slug, guests, tags, show notes MDX, transcript, chapters) is added in admin or `/content`.
 - Unpublished/unlisted videos never appear publicly.
 - Cache aggressively (ISR, revalidate ~1h) and respect API quota.
@@ -239,6 +239,10 @@ Ship the CSV import and pipeline view as early as practical — Ayan already has
 ---
 
 ## 12. Open decisions to resolve in Phase 0
+
+v1 locked these: Netlify (Git auto-publish, no GitHub Actions deploy), Broadsheet tokens (ink `#201e1d`, cyan `#0088b0`, magenta `#d6006c`, Source Serif 4, type-only wordmark), host line “Hosted by Ayan Putatunda” linking only to `https://ayanputatunda.com` with no employer and no bio, contact `thepractitionerspod@gmail.com`, and YouTube `https://www.youtube.com/@thepractitionerspod` (verified; the channel had no public videos on 2026-10-31). No newsletter. Supabase is still not provisioned; the public site does not require it.
+
+The list below is the original Phase 0 questionnaire. Treat the v1 lock above as the decision when they disagree.
 
 1. Confirm stack defaults in §4 (especially Supabase vs. alternative, Cal.com vs. native Google Calendar).
 2. Confirm domain ownership and DNS provider for `thepractitionerspod.com`.

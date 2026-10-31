@@ -1,19 +1,22 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: ['i.ytimg.com', 'img.youtube.com', 'yt3.ggpht.com'],
     remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: '**.ytimg.com',
-      },
-      {
-        protocol: 'https',
-        hostname: '**.youtube.com',
-      },
+      { protocol: 'https', hostname: 'i.ytimg.com' },
+      { protocol: 'https', hostname: 'i.ytimg.com', pathname: '/vi/**' },
+      { protocol: 'https', hostname: 'img.youtube.com' },
+      { protocol: 'https', hostname: 'yt3.ggpht.com' },
     ],
+  },
+  async redirects() {
+    return [
+      {
+        source: '/apply',
+        destination: '/guest-application',
+        permanent: false,
+      },
+    ]
   },
 }
 
 module.exports = nextConfig
-
