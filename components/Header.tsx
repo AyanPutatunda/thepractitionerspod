@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useState } from 'react'
-import { List, X } from '@phosphor-icons/react'
+import { Menu, X } from 'lucide-react'
 import { Wordmark } from '@/components/Wordmark'
 
 const links = [
@@ -31,9 +31,9 @@ export function Header() {
           onClick={() => setOpen((value) => !value)}
         >
           {open ? (
-            <X size={22} weight="duotone" aria-hidden />
+            <X size={18} strokeWidth={1.5} aria-hidden />
           ) : (
-            <List size={22} weight="duotone" aria-hidden />
+            <Menu size={18} strokeWidth={1.5} aria-hidden />
           )}
           <span className="sr-only">{open ? 'Close menu' : 'Open menu'}</span>
         </button>

@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, type FormEvent } from 'react'
-import { CheckCircle } from '@phosphor-icons/react'
+import { Check } from 'lucide-react'
 import { formErrors, guestApplicationSchema } from '@/lib/forms'
 import { site } from '@/lib/site'
 
@@ -59,12 +59,7 @@ export function GuestApplicationForm() {
   if (status === 'success') {
     return (
       <p className="status" role="status">
-        <CheckCircle
-          size={24}
-          weight="duotone"
-          aria-hidden
-          style={{ color: 'var(--color-accent)' }}
-        />{' '}
+        <Check size={18} strokeWidth={1.5} aria-hidden />
         Received. Your application is in. A reply, if one is needed, will come from {site.email}.
       </p>
     )
@@ -152,7 +147,7 @@ export function GuestApplicationForm() {
           aria-describedby={errors.story ? 'story-error' : 'story-hint'}
           required
         />
-        <p id="story-hint" className="quiet" style={{ margin: '6px 0 0', fontSize: 14 }}>
+        <p id="story-hint" className="quiet" style={{ margin: '8px 0 0', fontSize: 14 }}>
           What you shipped, what broke, and what you would do differently.
         </p>
         {errors.story ? (
@@ -205,9 +200,9 @@ export function GuestApplicationForm() {
         className="btn btn-primary"
         type="submit"
         disabled={status === 'sending'}
-        style={{ minHeight: 48, width: 'fit-content', paddingInline: 24, fontSize: 16 }}
+        style={{ width: 'fit-content' }}
       >
-        {status === 'sending' ? 'Sending…' : 'Submit application'}
+        {status === 'sending' ? 'Sending' : 'Submit application'}
       </button>
     </form>
   )

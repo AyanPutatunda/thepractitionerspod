@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { useMemo, useState } from 'react'
-import { MagnifyingGlass } from '@phosphor-icons/react'
+import { Search } from 'lucide-react'
 import type { Episode } from '@/lib/episodes'
 import { formatDate } from '@/lib/text'
 
@@ -18,26 +18,17 @@ export function EpisodeArchive({ episodes }: { episodes: Episode[] }) {
 
   return (
     <>
-      <section
-        aria-label="Filter episodes"
-        style={{
-          display: 'flex',
-          flexWrap: 'wrap',
-          gap: '16px 28px',
-          alignItems: 'center',
-          paddingBottom: 48,
-        }}
-      >
+      <section className="filters" aria-label="Filter episodes">
         <div className="search-wrap">
           <label htmlFor="ep-search" className="sr-only">
             Search episodes
           </label>
-          <MagnifyingGlass size={18} weight="duotone" aria-hidden />
+          <Search size={16} strokeWidth={1.5} aria-hidden />
           <input
             id="ep-search"
             className="input"
             type="search"
-            placeholder="Search titles"
+            placeholder="Search"
             value={query}
             onChange={(event) => setQuery(event.target.value)}
           />
@@ -51,13 +42,13 @@ export function EpisodeArchive({ episodes }: { episodes: Episode[] }) {
               <span className="numeral" aria-hidden="true">
                 {episode.number}
               </span>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 10, maxWidth: '68ch' }}>
+              <div className="archive-body">
                 <Link className="archive-title" href={`/episodes/${episode.slug}`}>
                   <span className="sr-only">Episode {episode.number}: </span>
                   {episode.title}
                 </Link>
                 {episode.description ? (
-                  <p className="lede" style={{ fontSize: 16, lineHeight: '26px' }}>
+                  <p className="lede">
                     {episode.description.replace(/\s+/g, ' ').trim().slice(0, 220)}
                   </p>
                 ) : null}
@@ -70,7 +61,7 @@ export function EpisodeArchive({ episodes }: { episodes: Episode[] }) {
           ))}
         </ol>
       ) : (
-        <p role="status" className="lede" style={{ paddingBottom: 112 }}>
+        <p role="status" className="lede">
           No episodes match “{query.trim()}”.{' '}
           <button type="button" className="btn btn-ghost" onClick={() => setQuery('')}>
             Clear search

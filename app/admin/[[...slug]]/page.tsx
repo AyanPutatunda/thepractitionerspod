@@ -1,4 +1,5 @@
 import { notFound } from 'next/navigation'
+import { PencilMark } from '@/components/PencilMark'
 import { isSupabaseConfigured } from '@/lib/env'
 import { createClient } from '@/lib/supabase/server'
 
@@ -16,9 +17,14 @@ export default async function AdminPage() {
   }
 
   return (
-    <section style={{ padding: 'clamp(48px, 7vw, 96px) 0 112px', maxWidth: '46ch' }}>
-      <h1 className="display">Admin</h1>
-      <p className="dek">You are signed in. Pipeline tools are not in this release.</p>
+    <section className="page">
+      <header className="page-intro">
+        <div className="title-block">
+          <h1 className="display">Admin</h1>
+          <PencilMark />
+        </div>
+        <p className="dek">You are signed in. Pipeline tools are not in this release.</p>
+      </header>
     </section>
   )
 }

@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { PencilMark } from '@/components/PencilMark'
 import { site } from '@/lib/site'
 
 export const metadata: Metadata = {
@@ -28,18 +29,12 @@ const steps = [
 
 export default function AboutPage() {
   return (
-    <>
-      <section
-        style={{
-          padding: 'clamp(48px, 7vw, 96px) 0 72px',
-          display: 'flex',
-          flexDirection: 'column',
-          gap: 26,
-          maxWidth: '68ch',
-        }}
-      >
-        <span className="kicker">About the show</span>
-        <h1 className="display">The Practitioners Pod</h1>
+    <div className="page">
+      <header className="page-intro">
+        <div className="title-block">
+          <h1 className="display">The Practitioners Pod</h1>
+          <PencilMark />
+        </div>
         <p className="dek">
           Conversations with senior practitioners about what actually happened when they shipped the
           work.
@@ -48,19 +43,9 @@ export default function AboutPage() {
           The name is the show, not a single format. Episodes are on YouTube. The point is the
           implementation: what ran, what failed, and what changed.
         </p>
-      </section>
+      </header>
 
-      <section
-        aria-labelledby="host-h"
-        style={{
-          padding: '0 0 96px',
-          display: 'flex',
-          flexDirection: 'column',
-          gap: 16,
-          maxWidth: '62ch',
-        }}
-      >
-        <span className="kicker">The host</span>
+      <section aria-labelledby="host-h" style={{ maxWidth: '40rem' }}>
         <h2 id="host-h" className="section-title">
           Hosted by <a href={site.hostUrl}>{site.hostName}</a>
         </h2>
@@ -69,24 +54,22 @@ export default function AboutPage() {
         </p>
       </section>
 
-      <section aria-labelledby="how-h" style={{ padding: '24px 0 112px' }}>
-        <h2 id="how-h" className="section-title" style={{ marginBottom: 44 }}>
+      <section aria-labelledby="how-h">
+        <h2 id="how-h" className="section-title">
           How an episode is made
         </h2>
-        <ol className="columns-3">
+        <ol className="notes">
           {steps.map((step) => (
-            <li key={step.n} style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
-              <span className="step-num" aria-hidden="true">
-                {step.n}
-              </span>
-              <h3 style={{ fontSize: 22, lineHeight: '28px', margin: 0 }}>{step.title}</h3>
-              <p className="lede" style={{ fontSize: 16, lineHeight: '26px' }}>
-                {step.body}
-              </p>
+            <li key={step.n}>
+              <span className="notes-num">{step.n}</span>
+              <div>
+                <h3>{step.title}</h3>
+                <p className="lede">{step.body}</p>
+              </div>
             </li>
           ))}
         </ol>
       </section>
-    </>
+    </div>
   )
 }
