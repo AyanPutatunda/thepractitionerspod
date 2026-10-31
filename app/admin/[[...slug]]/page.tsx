@@ -1,5 +1,4 @@
 import { notFound } from 'next/navigation'
-import { PencilMark } from '@/components/PencilMark'
 import { isSupabaseConfigured } from '@/lib/env'
 import { createClient } from '@/lib/supabase/server'
 
@@ -21,7 +20,6 @@ export default async function AdminPage() {
       <header className="page-intro">
         <div className="title-block">
           <h1 className="display">Admin</h1>
-          <PencilMark />
         </div>
         <p className="dek">You are signed in. Pipeline tools are not in this release.</p>
       </header>

@@ -3,7 +3,7 @@ import { youtubeEmbedUrl } from '@/lib/youtube'
 export function YouTubeEmbed({ videoId, title }: { videoId: string; title: string }) {
   return (
     <figure>
-      <div className="video-frame">
+      <div className="video-frame glass">
         <iframe
           src={youtubeEmbedUrl(videoId)}
           title={title}

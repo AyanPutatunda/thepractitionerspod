@@ -1,6 +1,5 @@
 import type { Metadata } from 'next'
 import { GuestApplicationForm } from '@/components/GuestApplicationForm'
-import { PencilMark } from '@/components/PencilMark'
 
 export const metadata: Metadata = {
   title: 'Be a guest',
@@ -15,7 +14,6 @@ export default function GuestApplicationPage() {
       <header className="page-intro">
         <div className="title-block">
           <h1 className="display">Tell the story of something you shipped</h1>
-          <PencilMark />
         </div>
         <p className="dek">
           A remote conversation about real implementation, published on YouTube. No vendor pitches.

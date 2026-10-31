@@ -1,22 +1,38 @@
 'use client'
 
-import { useState, type FormEvent } from 'react'
+import { useState, type FocusEvent, type FormEvent } from 'react'
 import { Check } from 'lucide-react'
-import { formErrors, guestApplicationSchema } from '@/lib/forms'
+import { formErrors, guestApplicationSchema, issueFor } from '@/lib/forms'
 import { site } from '@/lib/site'
 
-const fields = [
+const aboutYou = [
   { name: 'name', label: 'Name', type: 'text', autoComplete: 'name' },
   { name: 'email', label: 'Email', type: 'email', autoComplete: 'email' },
   { name: 'title', label: 'Title', type: 'text', autoComplete: 'organization-title' },
   { name: 'company', label: 'Company', type: 'text', autoComplete: 'organization' },
-  { name: 'linkedin', label: 'LinkedIn URL', type: 'url', autoComplete: 'url', optional: true },
 ] as const
 
 export function GuestApplicationForm() {
   const [status, setStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle')
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [formError, setFormError] = useState('')
+
+  function onBlur(event: FocusEvent<HTMLInputElement | HTMLTextAreaElement>) {
+    const { name, value, type } = event.currentTarget
+    const nextValue =
+      type === 'checkbox' && event.currentTarget instanceof HTMLInputElement
+        ? event.currentTarget.checked
+          ? 'yes'
+          : ''
+        : value
+    const message = issueFor(guestApplicationSchema, name, nextValue)
+    setErrors((current) => {
+      const next = { ...current }
+      if (message) next[name] = message
+      else delete next[name]
+      return next
+    })
+  }
 
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -58,10 +74,12 @@ export function GuestApplicationForm() {
 
   if (status === 'success') {
     return (
-      <p className="status" role="status">
+      <div className="glass panel status" role="status">
         <Check size={18} strokeWidth={1.5} aria-hidden />
-        Received. Your application is in. A reply, if one is needed, will come from {site.email}.
-      </p>
+        <p>
+          Received. Your application is in. A reply, if one is needed, will come from {site.email}.
+        </p>
+      </div>
     )
   }
 
@@ -73,7 +91,7 @@ export function GuestApplicationForm() {
       data-netlify="true"
       netlify-honeypot="bot-field"
       onSubmit={onSubmit}
-      className="form-grid"
+      className="form-grid glass panel"
       noValidate
     >
       <input type="hidden" name="form-name" value="guest-application" />
@@ -82,101 +100,159 @@ export function GuestApplicationForm() {
           Don’t fill this out: <input name="bot-field" tabIndex={-1} autoComplete="off" />
         </label>
       </p>
-      {fields.map((field) => (
-        <div className="field" key={field.name}>
-          <label htmlFor={field.name}>
-            {field.label}
-            {'optional' in field && field.optional ? ' (optional)' : ''}
-          </label>
+
+      <fieldset className="form-group">
+        <legend>About you</legend>
+        <div className="field-row">
+          {aboutYou.slice(0, 2).map((field) => (
+            <div className="field" key={field.name}>
+              <label htmlFor={field.name}>{field.label}</label>
+              <input
+                id={field.name}
+                className="input"
+                name={field.name}
+                type={field.type}
+                autoComplete={field.autoComplete}
+                aria-invalid={errors[field.name] ? true : undefined}
+                aria-describedby={errors[field.name] ? `${field.name}-error` : undefined}
+                required
+                onBlur={onBlur}
+              />
+              {errors[field.name] ? (
+                <p id={`${field.name}-error`} className="field-error">
+                  {errors[field.name]}
+                </p>
+              ) : null}
+            </div>
+          ))}
+        </div>
+        <div className="field-row">
+          {aboutYou.slice(2).map((field) => (
+            <div className="field" key={field.name}>
+              <label htmlFor={field.name}>{field.label}</label>
+              <input
+                id={field.name}
+                className="input"
+                name={field.name}
+                type={field.type}
+                autoComplete={field.autoComplete}
+                aria-invalid={errors[field.name] ? true : undefined}
+                aria-describedby={errors[field.name] ? `${field.name}-error` : undefined}
+                required
+                onBlur={onBlur}
+              />
+              {errors[field.name] ? (
+                <p id={`${field.name}-error`} className="field-error">
+                  {errors[field.name]}
+                </p>
+              ) : null}
+            </div>
+          ))}
+        </div>
+        <div className="field">
+          <label htmlFor="linkedin">LinkedIn URL (optional)</label>
           <input
-            id={field.name}
+            id="linkedin"
             className="input"
-            name={field.name}
-            type={field.type}
-            autoComplete={'autoComplete' in field ? field.autoComplete : undefined}
-            aria-invalid={errors[field.name] ? true : undefined}
-            aria-describedby={errors[field.name] ? `${field.name}-error` : undefined}
-            required={!('optional' in field && field.optional)}
+            name="linkedin"
+            type="url"
+            autoComplete="url"
+            aria-invalid={errors.linkedin ? true : undefined}
+            aria-describedby={errors.linkedin ? 'linkedin-error' : undefined}
+            onBlur={onBlur}
           />
-          {errors[field.name] ? (
-            <p id={`${field.name}-error`} className="field-error">
-              {errors[field.name]}
+          {errors.linkedin ? (
+            <p id="linkedin-error" className="field-error">
+              {errors.linkedin}
             </p>
           ) : null}
         </div>
-      ))}
-      <div className="field">
-        <label htmlFor="bio">Short bio</label>
-        <textarea
-          id="bio"
-          className="input"
-          name="bio"
-          aria-invalid={errors.bio ? true : undefined}
-          aria-describedby={errors.bio ? 'bio-error' : undefined}
-          required
-        />
-        {errors.bio ? (
-          <p id="bio-error" className="field-error">
-            {errors.bio}
+      </fieldset>
+
+      <fieldset className="form-group">
+        <legend>The story</legend>
+        <div className="field">
+          <label htmlFor="bio">Short bio</label>
+          <textarea
+            id="bio"
+            className="input"
+            name="bio"
+            aria-invalid={errors.bio ? true : undefined}
+            aria-describedby={errors.bio ? 'bio-error' : undefined}
+            required
+            onBlur={onBlur}
+          />
+          {errors.bio ? (
+            <p id="bio-error" className="field-error">
+              {errors.bio}
+            </p>
+          ) : null}
+        </div>
+        <div className="field">
+          <label htmlFor="topics">Topics you want to talk about</label>
+          <textarea
+            id="topics"
+            className="input"
+            name="topics"
+            aria-invalid={errors.topics ? true : undefined}
+            aria-describedby={errors.topics ? 'topics-error' : undefined}
+            required
+            onBlur={onBlur}
+          />
+          {errors.topics ? (
+            <p id="topics-error" className="field-error">
+              {errors.topics}
+            </p>
+          ) : null}
+        </div>
+        <div className="field">
+          <label htmlFor="story">An implementation story</label>
+          <textarea
+            id="story"
+            className="input"
+            name="story"
+            aria-invalid={errors.story ? true : undefined}
+            aria-describedby={errors.story ? 'story-error' : 'story-hint'}
+            required
+            onBlur={onBlur}
+          />
+          <p id="story-hint" className="quiet">
+            What you shipped, what broke, and what you would do differently.
           </p>
-        ) : null}
-      </div>
-      <div className="field">
-        <label htmlFor="topics">Topics you want to talk about</label>
-        <textarea
-          id="topics"
-          className="input"
-          name="topics"
-          aria-invalid={errors.topics ? true : undefined}
-          aria-describedby={errors.topics ? 'topics-error' : undefined}
-          required
-        />
-        {errors.topics ? (
-          <p id="topics-error" className="field-error">
-            {errors.topics}
-          </p>
-        ) : null}
-      </div>
-      <div className="field">
-        <label htmlFor="story">An implementation story</label>
-        <textarea
-          id="story"
-          className="input"
-          name="story"
-          aria-invalid={errors.story ? true : undefined}
-          aria-describedby={errors.story ? 'story-error' : 'story-hint'}
-          required
-        />
-        <p id="story-hint" className="quiet" style={{ margin: '8px 0 0', fontSize: 14 }}>
-          What you shipped, what broke, and what you would do differently.
-        </p>
-        {errors.story ? (
-          <p id="story-error" className="field-error">
-            {errors.story}
-          </p>
-        ) : null}
-      </div>
-      <div className="field">
-        <label htmlFor="availability">Availability and timezone</label>
-        <input
-          id="availability"
-          className="input"
-          name="availability"
-          type="text"
-          required
-          aria-invalid={errors.availability ? true : undefined}
-          aria-describedby={errors.availability ? 'availability-error' : undefined}
-        />
-        {errors.availability ? (
-          <p id="availability-error" className="field-error">
-            {errors.availability}
-          </p>
-        ) : null}
-      </div>
-      <div className="field">
-        <label htmlFor="heard-from">How you heard about the show (optional)</label>
-        <input id="heard-from" className="input" name="heard-from" type="text" />
-      </div>
+          {errors.story ? (
+            <p id="story-error" className="field-error">
+              {errors.story}
+            </p>
+          ) : null}
+        </div>
+      </fieldset>
+
+      <fieldset className="form-group">
+        <legend>Timing</legend>
+        <div className="field">
+          <label htmlFor="availability">Availability and timezone</label>
+          <input
+            id="availability"
+            className="input"
+            name="availability"
+            type="text"
+            required
+            aria-invalid={errors.availability ? true : undefined}
+            aria-describedby={errors.availability ? 'availability-error' : undefined}
+            onBlur={onBlur}
+          />
+          {errors.availability ? (
+            <p id="availability-error" className="field-error">
+              {errors.availability}
+            </p>
+          ) : null}
+        </div>
+        <div className="field">
+          <label htmlFor="heard-from">How you heard about the show (optional)</label>
+          <input id="heard-from" className="input" name="heard-from" type="text" onBlur={onBlur} />
+        </div>
+      </fieldset>
+
       <label className="check">
         <input
           type="checkbox"
@@ -184,6 +260,7 @@ export function GuestApplicationForm() {
           value="yes"
           required
           aria-invalid={errors.consent ? true : undefined}
+          onBlur={onBlur}
         />
         <span>
           I agree to be contacted about this application. I have read the{' '}
@@ -196,12 +273,7 @@ export function GuestApplicationForm() {
           {formError}
         </p>
       ) : null}
-      <button
-        className="btn btn-primary"
-        type="submit"
-        disabled={status === 'sending'}
-        style={{ width: 'fit-content' }}
-      >
+      <button className="btn btn-primary" type="submit" disabled={status === 'sending'}>
         {status === 'sending' ? 'Sending' : 'Submit application'}
       </button>
     </form>

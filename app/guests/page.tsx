@@ -1,6 +1,5 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { PencilMark } from '@/components/PencilMark'
 
 export const metadata: Metadata = {
   title: 'Guests',
@@ -14,11 +13,10 @@ export default function GuestsPage() {
       <header className="page-intro">
         <div className="title-block">
           <h1 className="display">The people who ship it</h1>
-          <PencilMark />
         </div>
         <p className="dek">Guests appear here as episodes publish.</p>
       </header>
-      <section aria-labelledby="suggest-h" style={{ maxWidth: '40rem' }}>
+      <section className="glass panel" aria-labelledby="suggest-h" style={{ maxWidth: '40rem' }}>
         <h2 id="suggest-h" className="section-title">
           Know someone who should be here?
         </h2>
