@@ -4,12 +4,11 @@ Owner: Ayan Putatunda. Working rules: [CLAUDE.md](./CLAUDE.md).
 
 ## Done
 
-Phase 0 is on `main` (PR #3). This branch is public v1: a Broadsheet Next.js site that builds and renders with no Supabase project.
+Phase 0 is on `main` (PR #3). Public v1 shipped in PR #4. This branch is the unslop pass on that site: same pages and data, a warmer human layout.
 
 - Next.js **16.4.3** (Active LTS), React 19.3.1, `@supabase/ssr` 0.7.0. `cookies()` is async. Request interception is `proxy.ts` (the Next 16 name for middleware).
 - The Astro site in `web/` and `.github/workflows/deploy.yml` are removed. Netlify Git auto-publish is the only deployer. Root [`netlify.toml`](./netlify.toml) builds with `npm run build`, publishes `.next`, Node 22. No GitHub Actions Netlify deploy job.
-- Visual system is the Broadsheet export: tokens and `.btn`, `.tag`, `.card`, `.nav`, `.field` live in [`app/globals.css`](./app/globals.css) and are mirrored in [`tailwind.config.ts`](./tailwind.config.ts). Source Serif 4 for headings and body. Wordmark is type only, with italic “Pod”. Process yellow is not in the stylesheet. The headline misregistration uses cyan and magenta plates only, and those plates are removed under `prefers-reduced-motion`.
-- Primary buttons and accent-colored text at body size use accent-700 (`#006786`) so they clear WCAG AA. The brand accent `#0088b0` stays on large numerals.
+- Visual system after unslop: warm paper tokens and `.btn`, `.tag`, `.card`, `.nav`, `.field` live in [`app/globals.css`](./app/globals.css) and are mirrored in [`tailwind.config.ts`](./tailwind.config.ts). Newsreader for headlines, Instrument Sans for the interface, weights 400 and 500. The wordmark is the name in the sans, with no italic. One accent, cyan, and accent-ink `#006786` for small text, links, and the 2px focus ring. Primary buttons are ink on paper. A pencil stroke sits under each page title. The empty home hero is an open notebook with one pen stroke, not a fake episode. Motion is one short fade-rise and is removed under `prefers-reduced-motion`. The skill copy, license, and attribution live in `.cursor/skills/unslop/`.
 - Public pages: `/`, `/episodes`, `/episodes/[slug]`, `/guests`, `/about`, `/guest-application`, `/contact`, `/privacy`, `/terms`, and the not-found page. No newsletter route.
 - YouTube handle `https://www.youtube.com/@thepractitionerspod` was verified on 2026-10-31 (channel id `UCe21K5ANdbqOXa8dHGi6Jzg`, title ThePractitionersPod). The public uploads feed had **no videos**. Home, episodes, and guests render that empty state. Episode pages embed `youtube-nocookie.com` when a public video exists. Nothing on this site publishes an RSS feed.
 - Guest application and contact post to Netlify Forms via `public/__forms.html` (honeypot included), with client-side zod checks and an on-page success state. `next start` locally returns 500 for that POST because Netlify’s form parser is not in front of it; the form then shows the email fallback.
@@ -27,7 +26,7 @@ Phase 0 is on `main` (PR #3). This branch is public v1: a Broadsheet Next.js sit
 
 ## Open decisions
 
-Resolved for v1 and recorded in [CLAUDE.md](./CLAUDE.md) §12: Netlify, Broadsheet palette and type, type-only wordmark, host credit with no bio, Gmail contact, YouTube only.
+Resolved for v1 and recorded in [CLAUDE.md](./CLAUDE.md) §12: Netlify, warm-paper palette and type, type-only wordmark, host credit with no bio, Gmail contact, YouTube only.
 
 Still open:
 

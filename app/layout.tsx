@@ -1,17 +1,23 @@
 import type { Metadata } from 'next'
-import { Source_Serif_4 } from 'next/font/google'
+import { Instrument_Sans, Newsreader } from 'next/font/google'
 import { Footer } from '@/components/Footer'
 import { Header } from '@/components/Header'
 import { JsonLd } from '@/components/JsonLd'
 import { site, siteUrl } from '@/lib/site'
 import './globals.css'
 
-const sourceSerif = Source_Serif_4({
+const instrument = Instrument_Sans({
   subsets: ['latin'],
-  weight: ['400', '600'],
-  style: ['normal', 'italic'],
+  weight: ['400', '500'],
   display: 'swap',
-  variable: '--font-source-serif',
+  variable: '--font-instrument',
+})
+
+const newsreader = Newsreader({
+  subsets: ['latin'],
+  weight: ['400', '500'],
+  display: 'swap',
+  variable: '--font-newsreader',
 })
 
 export const metadata: Metadata = {
@@ -45,7 +51,7 @@ export const revalidate = 3600
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const url = siteUrl()
   return (
-    <html lang="en" className={sourceSerif.variable}>
+    <html lang="en" className={`${instrument.variable} ${newsreader.variable}`}>
       <body>
         <a className="skip-link" href="#main">
           Skip to content

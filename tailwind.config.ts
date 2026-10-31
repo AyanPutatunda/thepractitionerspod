@@ -1,69 +1,38 @@
 import type { Config } from 'tailwindcss'
 
-const accent = {
-  DEFAULT: 'var(--color-accent)',
-  100: 'var(--color-accent-100)',
-  200: 'var(--color-accent-200)',
-  300: 'var(--color-accent-300)',
-  400: 'var(--color-accent-400)',
-  500: 'var(--color-accent-500)',
-  600: 'var(--color-accent-600)',
-  700: 'var(--color-accent-700)',
-  800: 'var(--color-accent-800)',
-  900: 'var(--color-accent-900)',
-}
-
-const magenta = {
-  DEFAULT: 'var(--color-accent-2)',
-  100: 'var(--color-accent-2-100)',
-  200: 'var(--color-accent-2-200)',
-  300: 'var(--color-accent-2-300)',
-  400: 'var(--color-accent-2-400)',
-  500: 'var(--color-accent-2-500)',
-  600: 'var(--color-accent-2-600)',
-  700: 'var(--color-accent-2-700)',
-  800: 'var(--color-accent-2-800)',
-  900: 'var(--color-accent-2-900)',
-}
-
-const neutral = {
-  100: 'var(--color-neutral-100)',
-  200: 'var(--color-neutral-200)',
-  300: 'var(--color-neutral-300)',
-  400: 'var(--color-neutral-400)',
-  500: 'var(--color-neutral-500)',
-  600: 'var(--color-neutral-600)',
-  700: 'var(--color-neutral-700)',
-  800: 'var(--color-neutral-800)',
-  900: 'var(--color-neutral-900)',
-}
-
 const config: Config = {
   content: ['./app/**/*.{js,ts,jsx,tsx,mdx}', './components/**/*.{js,ts,jsx,tsx,mdx}'],
   theme: {
     extend: {
       colors: {
         bg: 'var(--color-bg)',
-        surface: 'var(--color-surface)',
+        card: 'var(--color-card)',
+        raised: 'var(--color-raised)',
         ink: 'var(--color-text)',
-        accent,
-        magenta,
-        neutral,
+        secondary: 'var(--color-secondary)',
+        muted: 'var(--color-muted)',
+        accent: {
+          DEFAULT: 'var(--color-accent)',
+          ink: 'var(--color-accent-ink)',
+        },
       },
       fontFamily: {
-        sans: ['var(--font-source-serif)', 'Georgia', 'serif'],
-        serif: ['var(--font-source-serif)', 'Georgia', 'serif'],
-      },
-      fontWeight: {
-        heading: 'var(--font-heading-weight)',
+        sans: ['var(--font-instrument)', 'Avenir Next', 'Segoe UI', 'sans-serif'],
+        serif: ['var(--font-newsreader)', 'Georgia', 'serif'],
       },
       spacing: {
         s1: 'var(--space-1)',
         s2: 'var(--space-2)',
         s3: 'var(--space-3)',
         s4: 'var(--space-4)',
+        s5: 'var(--space-5)',
         s6: 'var(--space-6)',
         s8: 'var(--space-8)',
+        s10: 'var(--space-10)',
+        s12: 'var(--space-12)',
+        s16: 'var(--space-16)',
+        s20: 'var(--space-20)',
+        s24: 'var(--space-24)',
       },
       borderRadius: {
         sm: 'var(--radius-sm)',
@@ -73,10 +42,9 @@ const config: Config = {
       boxShadow: {
         sm: 'var(--shadow-sm)',
         md: 'var(--shadow-md)',
-        lg: 'var(--shadow-lg)',
       },
       maxWidth: {
-        sheet: '1200px',
+        sheet: '1120px',
       },
     },
   },

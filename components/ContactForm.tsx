@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, type FormEvent } from 'react'
-import { CheckCircle } from '@phosphor-icons/react'
+import { Check } from 'lucide-react'
 import { contactSchema, contactSubjects, formErrors } from '@/lib/forms'
 import { site } from '@/lib/site'
 
@@ -51,12 +51,7 @@ export function ContactForm() {
   if (status === 'success') {
     return (
       <p className="status" role="status">
-        <CheckCircle
-          size={24}
-          weight="duotone"
-          aria-hidden
-          style={{ color: 'var(--color-accent)' }}
-        />{' '}
+        <Check size={18} strokeWidth={1.5} aria-hidden />
         Received. If a reply is needed, it will come from {site.email}.
       </p>
     )
@@ -154,9 +149,9 @@ export function ContactForm() {
         className="btn btn-primary"
         type="submit"
         disabled={status === 'sending'}
-        style={{ minHeight: 48, width: 'fit-content', paddingInline: 24, fontSize: 16 }}
+        style={{ width: 'fit-content' }}
       >
-        {status === 'sending' ? 'Sending…' : 'Send message'}
+        {status === 'sending' ? 'Sending' : 'Send message'}
       </button>
     </form>
   )

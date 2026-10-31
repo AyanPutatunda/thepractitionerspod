@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { EpisodeArchive } from '@/components/EpisodeArchive'
+import { PencilMark } from '@/components/PencilMark'
 import { getEpisodes } from '@/lib/episodes'
 import { site } from '@/lib/site'
 
@@ -11,34 +12,29 @@ export const metadata: Metadata = {
 
 export default async function EpisodesPage() {
   const episodes = await getEpisodes()
+  const count =
+    episodes.length > 0
+      ? `${episodes.length} ${episodes.length === 1 ? 'episode' : 'episodes'}`
+      : null
 
   return (
-    <>
-      <section
-        style={{
-          padding: 'clamp(48px, 7vw, 96px) 0 40px',
-          display: 'flex',
-          flexDirection: 'column',
-          gap: 24,
-        }}
-      >
-        <span className="kicker">
-          The archive
-          {episodes.length > 0
-            ? ` · ${episodes.length} ${episodes.length === 1 ? 'episode' : 'episodes'}`
-            : ''}
-        </span>
-        <h1 className="display">Every episode</h1>
+    <div className="page">
+      <header className="page-intro">
+        {count ? <p className="meta">{count}</p> : null}
+        <div className="title-block">
+          <h1 className="display">Every episode</h1>
+          <PencilMark />
+        </div>
         <p className="dek">Conversations with people who have shipped the work. Newest first.</p>
-      </section>
+      </header>
       {episodes.length > 0 ? (
         <EpisodeArchive episodes={episodes} />
       ) : (
-        <p className="lede" style={{ paddingBottom: 112 }}>
+        <p className="lede">
           First episodes coming soon. They will be listed here when they are public on{' '}
           <a href={site.youtubeUrl}>YouTube</a>.
         </p>
       )}
-    </>
+    </div>
   )
 }
