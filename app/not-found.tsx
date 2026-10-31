@@ -1,5 +1,4 @@
 import Link from 'next/link'
-import { PencilMark } from '@/components/PencilMark'
 
 export default function NotFound() {
   return (
@@ -8,7 +7,6 @@ export default function NotFound() {
         <p className="meta">404</p>
         <div className="title-block">
           <h1 className="display">This page is not here</h1>
-          <PencilMark />
         </div>
         <p className="dek">The address doesn’t match a page on the site.</p>
         <div className="actions">

@@ -1,5 +1,4 @@
 import type { Metadata } from 'next'
-import { PencilMark } from '@/components/PencilMark'
 import { site } from '@/lib/site'
 
 export const metadata: Metadata = {
@@ -33,7 +32,6 @@ export default function AboutPage() {
       <header className="page-intro">
         <div className="title-block">
           <h1 className="display">The Practitioners Pod</h1>
-          <PencilMark />
         </div>
         <p className="dek">
           Conversations with senior practitioners about what actually happened when they shipped the
@@ -54,7 +52,7 @@ export default function AboutPage() {
         </p>
       </section>
 
-      <section aria-labelledby="how-h">
+      <section className="glass panel" aria-labelledby="how-h">
         <h2 id="how-h" className="section-title">
           How an episode is made
         </h2>

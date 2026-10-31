@@ -1,7 +1,5 @@
 'use client'
 
-import { PencilMark } from '@/components/PencilMark'
-
 export default function Error({
   reset,
 }: {
@@ -13,7 +11,6 @@ export default function Error({
       <header className="page-intro">
         <div className="title-block">
           <h1 className="display">This page didn’t load</h1>
-          <PencilMark />
         </div>
         <p className="dek">
           Try it again. If it keeps failing, the rest of the site is still available.

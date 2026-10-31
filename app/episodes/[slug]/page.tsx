@@ -3,7 +3,6 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { ArrowLeft } from 'lucide-react'
 import { JsonLd } from '@/components/JsonLd'
-import { PencilMark } from '@/components/PencilMark'
 import { Prose } from '@/components/Prose'
 import { YouTubeEmbed } from '@/components/YouTubeEmbed'
 import { episodeNeighbors, getEpisode, getEpisodes } from '@/lib/episodes'
@@ -69,7 +68,6 @@ export default async function EpisodePage({ params }: Props) {
           <h1 id="ep-title" className="display-sm">
             {episode.title}
           </h1>
-          <PencilMark />
         </div>
         {excerpt(episode.description) ? (
           <p className="dek">{excerpt(episode.description)}</p>
@@ -93,7 +91,7 @@ export default async function EpisodePage({ params }: Props) {
       {previous || next ? (
         <nav className="neighbors" aria-label="More episodes">
           {previous ? (
-            <Link href={`/episodes/${previous.slug}`} className="neighbor">
+            <Link href={`/episodes/${previous.slug}`} className="neighbor glass">
               <span className="meta">Previous · Episode {previous.number}</span>
               <strong>{previous.title}</strong>
             </Link>
@@ -101,7 +99,7 @@ export default async function EpisodePage({ params }: Props) {
             <span />
           )}
           {next ? (
-            <Link href={`/episodes/${next.slug}`} className="neighbor">
+            <Link href={`/episodes/${next.slug}`} className="neighbor glass">
               <span className="meta">Next · Episode {next.number}</span>
               <strong>{next.title}</strong>
             </Link>

@@ -1,23 +1,16 @@
 import type { Metadata } from 'next'
-import { Instrument_Sans, Newsreader } from 'next/font/google'
+import { Inter } from 'next/font/google'
 import { Footer } from '@/components/Footer'
 import { Header } from '@/components/Header'
 import { JsonLd } from '@/components/JsonLd'
 import { site, siteUrl } from '@/lib/site'
 import './globals.css'
 
-const instrument = Instrument_Sans({
+const inter = Inter({
   subsets: ['latin'],
-  weight: ['400', '500'],
+  weight: ['400', '500', '600'],
   display: 'swap',
-  variable: '--font-instrument',
-})
-
-const newsreader = Newsreader({
-  subsets: ['latin'],
-  weight: ['400', '500'],
-  display: 'swap',
-  variable: '--font-newsreader',
+  variable: '--font-inter',
 })
 
 export const metadata: Metadata = {
@@ -51,7 +44,7 @@ export const revalidate = 3600
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const url = siteUrl()
   return (
-    <html lang="en" className={`${instrument.variable} ${newsreader.variable}`}>
+    <html lang="en" className={inter.variable}>
       <body>
         <a className="skip-link" href="#main">
           Skip to content

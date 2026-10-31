@@ -51,12 +51,12 @@ You work for Ayan, a Staff Data Engineer (14+ years; Snowflake, dbt, Airflow, Cl
 **Reference points:** Stripe, Linear, Notion — clean, confident, editorial, lots of air.
 
 - **Tone:** authoritative, credible, sophisticated; not sterile or overly corporate.
-- **Palette:** warm paper neutrals plus one accent. Ink `#1f1b16`, cyan `#0088b0` (small text and focus use `#006786`). Magenta is not used. No process yellow.
-- **Typography:** Instrument Sans for the interface, Newsreader for headlines, both via `next/font`. Weights 400 and 500. The wordmark is the name in the sans, with no italic.
+- **Palette:** ink `#1c1c1e` and cyan `#0088b0` (small text, focus, and the filled button use `#006786`). Neutrals are the daylight frost. Magenta is not used. No process yellow.
+- **Typography:** the system stack (`-apple-system`, `BlinkMacSystemFont`, SF Pro), with Inter via `next/font` as the web fallback. Display headlines are weight 600 with tight tracking. No italic, no second display face.
 - **Layout:** generous white space, 12-column grid, max content width 1440px, mobile-first.
 - **Motion:** subtle only (fade/slide on scroll, hover states). Respect `prefers-reduced-motion`.
 - **Imagery:** real guest headshots and episode thumbnails from YouTube; avoid stock photos.
-- **Dark mode:** light only (warm paper, no dark surfaces). Tokens still live in one `:root` block so a later theme can be added without hunting through components.
+- **Dark mode:** light only. Tokens still live in one `:root` block so a later theme can be added without hunting through components.
 - **Accessibility:** WCAG 2.1 AA — contrast, keyboard navigation, focus rings, alt text, semantic HTML.
 
 Before building pages, load the `frontend-design` guidance if available and produce a small design-system page (`/styleguide`, dev-only) showing tokens, type scale, buttons, cards, and forms.
@@ -238,7 +238,7 @@ Ship the CSV import and pipeline view as early as practical — Ayan already has
 
 v1 locked these: Netlify (Git auto-publish, no GitHub Actions deploy), host line “Hosted by Ayan Putatunda” linking only to `https://ayanputatunda.com` with no employer and no bio, contact `thepractitionerspod@gmail.com`, and YouTube `https://www.youtube.com/@thepractitionerspod` (verified; the channel had no public videos on 2026-10-31). No newsletter. Supabase is still not provisioned; the public site does not require it.
 
-The public look after the unslop pass: warm paper (`#f7f4ee`), Newsreader headlines, Instrument Sans interface, cyan only as the pen accent (`#006786` on small text). A pencil stroke under each page title is the signature. The home hero shows an open notebook until a real episode exists.
+The public look is daylight glass on the unslop pass: a floating capsule nav, glass panels over two soft brand washes (ink and cyan), system type with Inter as the fallback, and a 32px cyan tick under the home headline. The home hero states the show and links to YouTube. An empty glass frame stands in until a real episode exists.
 
 The list below is the original Phase 0 questionnaire. Treat the v1 lock above as the decision when they disagree.
 
