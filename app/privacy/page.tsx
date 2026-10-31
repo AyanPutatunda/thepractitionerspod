@@ -1,103 +1,52 @@
-export const metadata = {
-  title: 'Privacy Policy | The Practitioners Pod',
-  description: 'Our privacy policy and how we handle your data.',
+import type { Metadata } from 'next'
+import { site } from '@/lib/site'
+
+export const metadata: Metadata = {
+  title: 'Privacy',
+  description: 'How The Practitioners Pod handles messages sent through this site.',
+  alternates: { canonical: '/privacy' },
 }
 
 export default function PrivacyPage() {
   return (
-    <div className="pt-32 pb-20">
-      <div className="container-custom">
-        <div className="max-w-4xl mx-auto">
-          <h1 className="text-primary mb-8">Privacy Policy</h1>
-          
-          <div className="prose prose-lg max-w-none space-y-8 text-text-secondary">
-            <section>
-              <h2 className="text-2xl font-semibold text-primary mb-4">
-                Introduction
-              </h2>
-              <p>
-                The Practitioners Pod (&quot;we,&quot; &quot;our,&quot; or &quot;us&quot;) is committed to protecting your privacy. 
-                This Privacy Policy explains how we collect, use, disclose, and safeguard your information 
-                when you visit our website or use our services.
-              </p>
-            </section>
-
-            <section>
-              <h2 className="text-2xl font-semibold text-primary mb-4">
-                Information We Collect
-              </h2>
-              <p>We may collect the following types of information:</p>
-              <ul className="list-disc pl-6 space-y-2">
-                <li>Personal identification information (name, email address, phone number)</li>
-                <li>Professional information (company, job title, LinkedIn profile)</li>
-                <li>Usage data (pages visited, time spent, interactions)</li>
-                <li>Device information (browser type, IP address, operating system)</li>
-              </ul>
-            </section>
-
-            <section>
-              <h2 className="text-2xl font-semibold text-primary mb-4">
-                How We Use Your Information
-              </h2>
-              <p>We use collected information for the following purposes:</p>
-              <ul className="list-disc pl-6 space-y-2">
-                <li>Processing guest applications</li>
-                <li>Sending newsletters and updates</li>
-                <li>Responding to inquiries and support requests</li>
-                <li>Improving our website and services</li>
-                <li>Analyzing usage patterns and trends</li>
-              </ul>
-            </section>
-
-            <section>
-              <h2 className="text-2xl font-semibold text-primary mb-4">
-                Data Sharing and Disclosure
-              </h2>
-              <p>
-                We do not sell, trade, or rent your personal information to third parties. 
-                We may share information in the following circumstances:
-              </p>
-              <ul className="list-disc pl-6 space-y-2">
-                <li>With your explicit consent</li>
-                <li>To comply with legal obligations</li>
-                <li>With service providers who assist in our operations</li>
-                <li>To protect our rights and property</li>
-              </ul>
-            </section>
-
-            <section>
-              <h2 className="text-2xl font-semibold text-primary mb-4">
-                Your Rights
-              </h2>
-              <p>You have the right to:</p>
-              <ul className="list-disc pl-6 space-y-2">
-                <li>Access your personal data</li>
-                <li>Correct inaccurate data</li>
-                <li>Request deletion of your data</li>
-                <li>Opt-out of marketing communications</li>
-                <li>Object to data processing</li>
-              </ul>
-            </section>
-
-            <section>
-              <h2 className="text-2xl font-semibold text-primary mb-4">
-                Contact Us
-              </h2>
-              <p>
-                If you have questions about this Privacy Policy, please contact us at:{' '}
-                <a href="mailto:privacy@thepractitionerspod.com" className="text-accent hover:text-accent/80">
-                  privacy@thepractitionerspod.com
-                </a>
-              </p>
-            </section>
-
-            <p className="text-sm text-text-secondary">
-              Last updated: {new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
+    <article
+      style={{
+        padding: 'clamp(48px, 7vw, 96px) 0 112px',
+        maxWidth: '68ch',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 18,
+      }}
+    >
+      <span className="kicker">Privacy</span>
+      <h1 className="display">Privacy</h1>
+      <p className="lede">
+        This page describes what the site actually collects. {site.name} is hosted by{' '}
+        <a href={site.hostUrl}>{site.hostName}</a>.
+      </p>
+      <h2 style={{ fontSize: 26, marginTop: 12 }}>Forms</h2>
+      <p className="lede">
+        The contact form and the guest application are collected by Netlify Forms, the form service
+        on the host that serves this site. Each submission includes the fields you fill in, and a
+        consent checkbox you have to tick. There is a hidden honeypot field for spam filtering.
+        Submissions are not sold.
+      </p>
+      <h2 style={{ fontSize: 26 }}>Email</h2>
+      <p className="lede">
+        You can also write to <a href={`mailto:${site.email}`}>{site.email}</a>. To ask for a form
+        submission to be deleted, email that address and say which message.
+      </p>
+      <h2 style={{ fontSize: 26 }}>Video</h2>
+      <p className="lede">
+        Episode pages embed YouTube’s privacy-enhanced player (youtube-nocookie.com). YouTube
+        receives the usual player request when the embed loads. This site does not run a newsletter
+        and does not set advertising cookies of its own.
+      </p>
+      <h2 style={{ fontSize: 26 }}>Admin</h2>
+      <p className="lede">
+        Guest records for the private pipeline are not part of this public release. When that
+        database is connected, access is limited to signed-in roles. It is not on this site yet.
+      </p>
+    </article>
   )
 }
-

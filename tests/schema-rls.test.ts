@@ -40,12 +40,8 @@ describe('supabase migrations', () => {
 
   it('enables and forces row level security on every table', () => {
     for (const table of tables) {
-      expect(sql, table).toContain(
-        `alter table public.${table} enable row level security`
-      )
-      expect(sql, table).toContain(
-        `alter table public.${table} force row level security`
-      )
+      expect(sql, table).toContain(`alter table public.${table} enable row level security`)
+      expect(sql, table).toContain(`alter table public.${table} force row level security`)
       expect(sql, table).toContain(`on public.${table}`)
     }
   })

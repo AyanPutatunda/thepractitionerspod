@@ -1,64 +1,86 @@
 import type { Config } from 'tailwindcss'
 
+const accent = {
+  DEFAULT: 'var(--color-accent)',
+  100: 'var(--color-accent-100)',
+  200: 'var(--color-accent-200)',
+  300: 'var(--color-accent-300)',
+  400: 'var(--color-accent-400)',
+  500: 'var(--color-accent-500)',
+  600: 'var(--color-accent-600)',
+  700: 'var(--color-accent-700)',
+  800: 'var(--color-accent-800)',
+  900: 'var(--color-accent-900)',
+}
+
+const magenta = {
+  DEFAULT: 'var(--color-accent-2)',
+  100: 'var(--color-accent-2-100)',
+  200: 'var(--color-accent-2-200)',
+  300: 'var(--color-accent-2-300)',
+  400: 'var(--color-accent-2-400)',
+  500: 'var(--color-accent-2-500)',
+  600: 'var(--color-accent-2-600)',
+  700: 'var(--color-accent-2-700)',
+  800: 'var(--color-accent-2-800)',
+  900: 'var(--color-accent-2-900)',
+}
+
+const neutral = {
+  100: 'var(--color-neutral-100)',
+  200: 'var(--color-neutral-200)',
+  300: 'var(--color-neutral-300)',
+  400: 'var(--color-neutral-400)',
+  500: 'var(--color-neutral-500)',
+  600: 'var(--color-neutral-600)',
+  700: 'var(--color-neutral-700)',
+  800: 'var(--color-neutral-800)',
+  900: 'var(--color-neutral-900)',
+}
+
 const config: Config = {
-  content: [
-    './pages/**/*.{js,ts,jsx,tsx,mdx}',
-    './components/**/*.{js,ts,jsx,tsx,mdx}',
-    './app/**/*.{js,ts,jsx,tsx,mdx}',
-  ],
+  content: ['./app/**/*.{js,ts,jsx,tsx,mdx}', './components/**/*.{js,ts,jsx,tsx,mdx}'],
   theme: {
     extend: {
       colors: {
-        primary: {
-          DEFAULT: '#1a2332',
-          dark: '#0a0a0a',
-        },
-        accent: {
-          DEFAULT: '#4a5f7f',
-          teal: '#5a8a9a',
-          gold: '#b8956a',
-        },
-        neutral: {
-          50: '#f8f9fa',
-          100: '#f1f3f5',
-          200: '#e9ecef',
-          300: '#dee2e6',
-          400: '#ced4da',
-          500: '#adb5bd',
-          600: '#6c757d',
-          700: '#495057',
-          800: '#343a40',
-          900: '#212529',
-        },
-        text: {
-          primary: '#1a202c',
-          secondary: '#4a5568',
-        }
+        bg: 'var(--color-bg)',
+        surface: 'var(--color-surface)',
+        ink: 'var(--color-text)',
+        accent,
+        magenta,
+        neutral,
       },
       fontFamily: {
-        sans: ['Inter', 'system-ui', 'sans-serif'],
-        serif: ['Georgia', 'serif'],
+        sans: ['var(--font-source-serif)', 'Georgia', 'serif'],
+        serif: ['var(--font-source-serif)', 'Georgia', 'serif'],
+      },
+      fontWeight: {
+        heading: 'var(--font-heading-weight)',
       },
       spacing: {
-        '128': '32rem',
-        '144': '36rem',
+        s1: 'var(--space-1)',
+        s2: 'var(--space-2)',
+        s3: 'var(--space-3)',
+        s4: 'var(--space-4)',
+        s6: 'var(--space-6)',
+        s8: 'var(--space-8)',
+      },
+      borderRadius: {
+        sm: 'var(--radius-sm)',
+        md: 'var(--radius-md)',
+        lg: 'var(--radius-lg)',
+      },
+      boxShadow: {
+        sm: 'var(--shadow-sm)',
+        md: 'var(--shadow-md)',
+        lg: 'var(--shadow-lg)',
       },
       maxWidth: {
-        'content': '1200px',
+        sheet: '1200px',
       },
-      letterSpacing: {
-        'heading': '0.02em',
-      },
-      lineHeight: {
-        'relaxed-plus': '1.7',
-        'loose-plus': '1.8',
-      },
-      transitionDuration: {
-        '350': '350ms',
-      }
     },
   },
   plugins: [],
 }
-export default config
 
+export default config

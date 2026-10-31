@@ -1,6 +1,5 @@
 .next
 node_modules
-web
 coverage
 package-lock.json
 *.min.js

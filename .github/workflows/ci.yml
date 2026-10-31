@@ -16,11 +16,8 @@ jobs:
   verify:
     runs-on: ubuntu-latest
     env:
-      # prisma generate reads DATABASE_URL and does not connect.
-      # Page data fetches fail closed during this build (no database in CI).
-      DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:5432/postgres?connect_timeout=2
-      NEXT_PUBLIC_SUPABASE_URL: https://placeholder.supabase.co
-      NEXT_PUBLIC_SUPABASE_ANON_KEY: placeholder-anon-key
+      # Public pages must build with no Supabase project and no YouTube API key.
+      NEXT_PUBLIC_SITE_URL: https://thepractitionerspod.com
     steps:
       - uses: actions/checkout@v4
 

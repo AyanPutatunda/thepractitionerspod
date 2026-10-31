@@ -4,126 +4,19 @@ export interface YouTubeVideo {
   description: string
   thumbnailUrl: string
   publishedAt: string
-  duration: string
-  viewCount: number
 }
 
-export async function getChannelVideos(channelId: string): Promise<YouTubeVideo[]> {
-  const apiKey = process.env.YOUTUBE_API_KEY
-  
-  if (!apiKey) {
-    console.error('YouTube API key not configured')
-    return []
-  }
-
-  try {
-    // Get uploads playlist ID
-    const channelResponse = await fetch(
-      `https://www.googleapis.com/youtube/v3/channels?part=contentDetails&id=${channelId}&key=${apiKey}`
-    )
-    
-    if (!channelResponse.ok) {
-      throw new Error('Failed to fetch channel data')
-    }
-
-    const channelData = await channelResponse.json()
-    const uploadsPlaylistId = channelData.items[0]?.contentDetails?.relatedPlaylists?.uploads
-
-    if (!uploadsPlaylistId) {
-      return []
-    }
-
-    // Get videos from uploads playlist
-    const playlistResponse = await fetch(
-      `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=${uploadsPlaylistId}&maxResults=50&key=${apiKey}`
-    )
-
-    if (!playlistResponse.ok) {
-      throw new Error('Failed to fetch playlist items')
-    }
-
-    const playlistData = await playlistResponse.json()
-
-    // Get video details including duration and view count
-    const videoIds = playlistData.items.map((item: any) => item.snippet.resourceId.videoId).join(',')
-    
-    const videosResponse = await fetch(
-      `https://www.googleapis.com/youtube/v3/videos?part=snippet,contentDetails,statistics&id=${videoIds}&key=${apiKey}`
-    )
-
-    if (!videosResponse.ok) {
-      throw new Error('Failed to fetch video details')
-    }
-
-    const videosData = await videosResponse.json()
-
-    const videos: YouTubeVideo[] = videosData.items.map((video: any) => ({
-      id: video.id,
-      title: video.snippet.title,
-      description: video.snippet.description,
-      thumbnailUrl: video.snippet.thumbnails.maxres?.url || video.snippet.thumbnails.high.url,
-      publishedAt: video.snippet.publishedAt,
-      duration: parseDuration(video.contentDetails.duration),
-      viewCount: parseInt(video.statistics.viewCount || '0'),
-    }))
-
-    return videos
-  } catch (error) {
-    console.error('Error fetching YouTube videos:', error)
-    return []
-  }
-}
-
-export async function getVideoById(videoId: string): Promise<YouTubeVideo | null> {
-  const apiKey = process.env.YOUTUBE_API_KEY
-  
-  if (!apiKey) {
-    return null
-  }
-
-  try {
-    const response = await fetch(
-      `https://www.googleapis.com/youtube/v3/videos?part=snippet,contentDetails,statistics&id=${videoId}&key=${apiKey}`
-    )
-
-    if (!response.ok) {
-      return null
-    }
-
-    const data = await response.json()
-    
-    if (!data.items || data.items.length === 0) {
-      return null
-    }
-
-    const video = data.items[0]
-
-    return {
-      id: video.id,
-      title: video.snippet.title,
-      description: video.snippet.description,
-      thumbnailUrl: video.snippet.thumbnails.maxres?.url || video.snippet.thumbnails.high.url,
-      publishedAt: video.snippet.publishedAt,
-      duration: parseDuration(video.contentDetails.duration),
-      viewCount: parseInt(video.statistics.viewCount || '0'),
-    }
-  } catch (error) {
-    console.error('Error fetching YouTube video:', error)
-    return null
-  }
-}
+const CHANNEL_ID_PATTERN = /UC[\w-]{22}/
 
 export function parseDuration(isoDuration: string): string {
-  const match = isoDuration.match(/PT(\d+H)?(\d+M)?(\d+S)?/)
-  
-  if (!match) return '0:00'
+  const match = isoDuration.match(/PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?/)
+  if (!match || !isoDuration.startsWith('PT')) return '0:00'
 
-  const hours = (match[1] || '').replace('H', '')
-  const minutes = (match[2] || '').replace('M', '')
-  const seconds = (match[3] || '').replace('S', '')
+  const hours = match[1] || ''
+  const minutes = match[2] || ''
+  const seconds = match[3] || ''
+  const parts: string[] = []
 
-  const parts = []
-  
   if (hours) parts.push(hours.padStart(2, '0'))
   parts.push((minutes || '0').padStart(2, '0'))
   parts.push((seconds || '0').padStart(2, '0'))
@@ -131,3 +24,99 @@ export function parseDuration(isoDuration: string): string {
   return parts.join(':')
 }
 
+export function isoDurationToMinutes(isoDuration: string): number | null {
+  const match = isoDuration.match(/^PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?$/)
+  if (!match) return null
+  const hours = Number(match[1] || 0)
+  const minutes = Number(match[2] || 0)
+  const seconds = Number(match[3] || 0)
+  if (!hours && !minutes && !seconds) return null
+  return Math.max(1, Math.round((hours * 3600 + minutes * 60 + seconds) / 60))
+}
+
+export function extractChannelId(html: string): string | null {
+  const labeled =
+    html.match(/"browseId":"(UC[\w-]{22})"/) ||
+    html.match(/"externalId":"(UC[\w-]{22})"/) ||
+    html.match(/youtube\.com\/channel\/(UC[\w-]{22})/)
+  return labeled?.[1] ?? null
+}
+
+export function slugifyTitle(title: string, videoId: string): string {
+  const base = title
+    .normalize('NFKD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/&/g, ' and ')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .slice(0, 72)
+    .replace(/-+$/g, '')
+  const id = videoId.toLowerCase()
+  return base ? `${base}-${id}` : id
+}
+
+export function youtubeEmbedUrl(videoId: string): string {
+  if (!/^[\w-]{11}$/.test(videoId)) {
+    throw new Error('Invalid YouTube video id')
+  }
+  return `https://www.youtube-nocookie.com/embed/${videoId}`
+}
+
+export function youtubeWatchUrl(videoId: string): string {
+  if (!/^[\w-]{11}$/.test(videoId)) {
+    throw new Error('Invalid YouTube video id')
+  }
+  return `https://www.youtube.com/watch?v=${videoId}`
+}
+
+function decodeXml(value: string): string {
+  return value
+    .replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g, '$1')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&apos;/g, "'")
+    .replace(/&#39;/g, "'")
+    .replace(/&amp;/g, '&')
+    .trim()
+}
+
+function tagText(entry: string, tag: string): string {
+  const pattern = new RegExp(`<${tag}(?:\\s[^>]*)?>([\\s\\S]*?)</${tag}>`)
+  const match = entry.match(pattern)
+  return match ? decodeXml(match[1]) : ''
+}
+
+export function parseYouTubeFeed(xml: string): YouTubeVideo[] {
+  if (!xml.includes('<feed')) return []
+  const entries = xml.split(/<entry\b[^>]*>/).slice(1)
+  const videos: YouTubeVideo[] = []
+
+  for (const entry of entries) {
+    const id = tagText(entry, 'yt:videoId')
+    const title = tagText(entry, 'title')
+    if (!/^[\w-]{11}$/.test(id) || !title) continue
+    const publishedAt = tagText(entry, 'published')
+    const description = tagText(entry, 'media:description')
+    const thumb = entry.match(/<media:thumbnail\b[^>]*\burl="([^"]+)"/)?.[1]
+    videos.push({
+      id,
+      title,
+      description,
+      thumbnailUrl: thumb || `https://i.ytimg.com/vi/${id}/hqdefault.jpg`,
+      publishedAt,
+    })
+  }
+
+  return videos
+}
+
+export function feedChannelId(xml: string): string | null {
+  const match = xml.match(/<yt:channelId>([^<]+)<\/yt:channelId>/)
+  if (!match) return null
+  const raw = match[1].trim()
+  if (CHANNEL_ID_PATTERN.test(raw)) return raw.match(CHANNEL_ID_PATTERN)?.[0] ?? null
+  if (/^[\w-]{22}$/.test(raw)) return `UC${raw}`
+  return null
+}

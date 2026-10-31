@@ -1,60 +1,71 @@
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
+import { Source_Serif_4 } from 'next/font/google'
+import { Footer } from '@/components/Footer'
+import { Header } from '@/components/Header'
+import { JsonLd } from '@/components/JsonLd'
+import { site, siteUrl } from '@/lib/site'
 import './globals.css'
-import Navigation from '@/components/Navigation'
-import Footer from '@/components/Footer'
-import { Toaster } from 'react-hot-toast'
 
-const inter = Inter({ 
+const sourceSerif = Source_Serif_4({
   subsets: ['latin'],
+  weight: ['400', '600'],
+  style: ['normal', 'italic'],
   display: 'swap',
-  variable: '--font-inter',
+  variable: '--font-source-serif',
 })
 
 export const metadata: Metadata = {
-  title: 'The Practitioners Pod | Conversations with Tech Leaders',
-  description: 'Professional podcast featuring tech industry leaders and practitioners. Deep conversations about building the future of technology.',
-  keywords: ['podcast', 'tech', 'technology', 'practitioners', 'leadership', 'interviews'],
-  authors: [{ name: 'The Practitioners Pod' }],
+  metadataBase: new URL(siteUrl()),
+  title: {
+    default: `${site.name} · Real implementation stories`,
+    template: `%s · ${site.name}`,
+  },
+  description: site.description,
+  applicationName: site.name,
+  authors: [{ name: site.hostName, url: site.hostUrl }],
+  alternates: { canonical: '/' },
   openGraph: {
-    title: 'The Practitioners Pod',
-    description: 'Conversations with Tech Practitioners Who Build the Future',
-    url: 'https://thepractitionerspod.com',
-    siteName: 'The Practitioners Pod',
-    locale: 'en_US',
     type: 'website',
+    locale: 'en_US',
+    siteName: site.name,
+    title: site.name,
+    description: site.description,
+    url: '/',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'The Practitioners Pod',
-    description: 'Conversations with Tech Practitioners Who Build the Future',
+    title: site.name,
+    description: site.description,
   },
-  robots: {
-    index: true,
-    follow: true,
-  },
+  robots: { index: true, follow: true },
 }
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
+export const revalidate = 3600
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  const url = siteUrl()
   return (
-    <html lang="en" className={inter.variable}>
-      <body className="antialiased">
-        <Navigation />
-        <main className="min-h-screen">
+    <html lang="en" className={sourceSerif.variable}>
+      <body>
+        <a className="skip-link" href="#main">
+          Skip to content
+        </a>
+        <Header />
+        <main id="main" tabIndex={-1} className="shell" style={{ outline: 'none' }}>
           {children}
         </main>
         <Footer />
-        <Toaster 
-          position="top-right"
-          toastOptions={{
-            duration: 4000,
-            style: {
-              background: '#1a2332',
-              color: '#fff',
+        <JsonLd
+          data={{
+            '@context': 'https://schema.org',
+            '@type': 'WebSite',
+            name: site.name,
+            url,
+            description: site.description,
+            publisher: {
+              '@type': 'Person',
+              name: site.hostName,
+              url: site.hostUrl,
             },
           }}
         />
@@ -62,4 +73,3 @@ export default function RootLayout({
     </html>
   )
 }
-
