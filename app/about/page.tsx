@@ -1,5 +1,7 @@
 import type { Metadata } from 'next'
-import { site } from '@/lib/site'
+import Image from 'next/image'
+import { JsonLd } from '@/components/JsonLd'
+import { site, siteUrl } from '@/lib/site'
 
 export const metadata: Metadata = {
   title: 'About',
@@ -43,14 +45,46 @@ export default function AboutPage() {
         </p>
       </header>
 
-      <section aria-labelledby="host-h" style={{ maxWidth: '40rem' }}>
-        <h2 id="host-h" className="section-title">
-          Hosted by <a href={site.hostUrl}>{site.hostName}</a>
-        </h2>
-        <p className="lede">
-          <a href={`mailto:${site.email}`}>{site.email}</a>
-        </p>
+      <section className="glass panel host" aria-labelledby="host-h">
+        <a className="host-portrait" href={site.hostUrl} target="_blank" rel="noopener noreferrer">
+          <Image
+            src="/images/ayan-putatunda.jpg"
+            alt="Ayan Putatunda, host of The Practitioners Pod"
+            width={935}
+            height={1198}
+            sizes="(max-width: 800px) 240px, 280px"
+            style={{ width: '100%', height: 'auto' }}
+          />
+          <span className="sr-only"> (opens in a new tab)</span>
+        </a>
+        <div className="host-copy">
+          <h2 id="host-h" className="section-title">
+            {site.hostName}
+          </h2>
+          <p className="lede">Host, The Practitioners Pod</p>
+          <p className="lede">
+            <a href={`mailto:${site.email}`}>{site.email}</a>
+          </p>
+          <a
+            className="btn btn-primary"
+            href={site.hostUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Visit ayanputatunda.com <span aria-hidden="true">↗</span>
+            <span className="sr-only"> (opens in a new tab)</span>
+          </a>
+        </div>
       </section>
+      <JsonLd
+        data={{
+          '@context': 'https://schema.org',
+          '@type': 'Person',
+          name: site.hostName,
+          url: site.hostUrl,
+          image: `${siteUrl()}/images/ayan-putatunda.jpg`,
+        }}
+      />
 
       <section className="glass panel" aria-labelledby="how-h">
         <h2 id="how-h" className="section-title">

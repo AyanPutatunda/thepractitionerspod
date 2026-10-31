@@ -681,6 +681,43 @@ textarea.input {
   max-width: 40rem;
 }
 
+.host {
+  display: grid;
+  grid-template-columns: 280px minmax(0, 1fr);
+  gap: 32px;
+  align-items: center;
+  max-width: 880px;
+}
+
+.host-portrait {
+  display: block;
+  padding: 8px;
+  border-radius: 20px;
+  background: #1c1c1e;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    0 8px 24px rgba(28, 28, 30, 0.16);
+  line-height: 0;
+  text-decoration: none;
+}
+
+.host-portrait img {
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+}
+
+.host-copy {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.host-copy .section-title {
+  margin: 0;
+}
+
 .cta-band {
   display: flex;
   flex-direction: column;
@@ -1027,8 +1064,13 @@ textarea.input {
   .split-panels,
   .footer,
   .neighbors,
-  .field-row {
+  .field-row,
+  .host {
     grid-template-columns: 1fr;
+  }
+
+  .host-portrait {
+    width: min(240px, 100%);
   }
 
   .section-title {

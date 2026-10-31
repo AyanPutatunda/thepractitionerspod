@@ -236,7 +236,7 @@ Ship the CSV import and pipeline view as early as practical — Ayan already has
 
 ## 12. Open decisions to resolve in Phase 0
 
-v1 locked these: Netlify (Git auto-publish, no GitHub Actions deploy), host line “Hosted by Ayan Putatunda” linking only to `https://ayanputatunda.com` with no employer and no bio, contact `thepractitionerspod@gmail.com`, and YouTube `https://www.youtube.com/@thepractitionerspod` (verified; the channel had no public videos on 2026-10-31). No newsletter. Supabase is still not provisioned; the public site does not require it.
+v1 locked these: Netlify (Git auto-publish, no GitHub Actions deploy), host credit for Ayan Putatunda with his portrait and the line “Host, The Practitioners Pod”, linking only to `https://ayanputatunda.com`, with no employer and no bio, contact `thepractitionerspod@gmail.com`, and YouTube `https://www.youtube.com/@thepractitionerspod` (verified; the channel had no public videos on 2026-10-31). No newsletter. Supabase is still not provisioned; the public site does not require it.
 
 The public look is daylight glass on the unslop pass: a floating capsule nav, glass panels over two soft brand washes (ink and cyan), system type with Inter as the fallback, and a 32px cyan tick under the home headline. The home hero states the show and links to YouTube. An empty glass frame stands in until a real episode exists.
 

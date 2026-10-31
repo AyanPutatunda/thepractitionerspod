@@ -22,7 +22,7 @@ Phase 0 is on `main` (PR #3). Public v1 shipped in PR #4. This branch is the uns
 2. When the YouTube channel publishes a video, the next build or hourly revalidation should list it. Duration and view count appear only if `YOUTUBE_API_KEY` is set in Netlify.
 3. Turn on Netlify Forms notifications to `thepractitionerspod@gmail.com` in the Netlify UI. Forms detection must be enabled for the site.
 4. Supabase, auth, the pipeline, and CSV import stay later. Do not create a hosted project until Ayan says so.
-5. Host photo and any employer mention stay off the site until Ayan writes them.
+5. The About host card uses Ayan’s portrait, the name, and “Host, The Practitioners Pod”, linking to https://ayanputatunda.com. No bio and no employer.
 
 ## Open decisions
 
